@@ -29,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "app/api/v1/users/tasks/[id]/route.js"
   ],
   "exclude": ["node_modules"]
 }

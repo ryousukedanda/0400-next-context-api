@@ -2,9 +2,11 @@
 
 @theme {
   --color-primary: #42b883;
+  --color-secondary: #1c3041;
   --color-light: #fff;
   --color-light2: #fefefe;
   --color-light3: #f9f9f9;
+  --color-primary-darker: #0d864f;
   --color-dark: #55655c;
   --color-border: #b6b6b6;
   --color-danger: #d64045;
@@ -12,4 +14,6 @@
   --color-content: #fbfbfb;
   --color-dark-week: #94ae9f;
   --color-table-border: #e2e2e290;
+  --color-overlay: #22222220;
+  --color-shadow: #22222220;
 }

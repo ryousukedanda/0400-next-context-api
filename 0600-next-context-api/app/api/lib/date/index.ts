@@ -6,7 +6,7 @@ export default class AppDate {
     }
 
     const [year, month, day] = dateString
-      .split("-")
+      .split('-')
       .map((str) => parseInt(str, 10));
     return new AppDate(new Date(year, month - 1, day));
   }
@@ -26,8 +26,8 @@ export default class AppDate {
   }
 
   toString() {
-    const month = (this.date.getMonth() + 1).toString().padStart(2, "0");
-    const day = this.date.getDate().toString().padStart(2, "0");
+    const month = (this.date.getMonth() + 1).toString().padStart(2, '0');
+    const day = this.date.getDate().toString().padStart(2, '0');
 
     return `${this.date.getFullYear()}-${month}-${day}`;
   }

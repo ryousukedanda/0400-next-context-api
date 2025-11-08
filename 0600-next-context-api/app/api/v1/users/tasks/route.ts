@@ -1,35 +1,35 @@
-import { NextResponse } from "next/server";
-import dayjs from "dayjs";
-import AppDate from "../../../lib/date";
-import { getTasks, setTasks, getProjects, getUUID } from "../../../datastore";
-import { factory } from "../../../datastore/models";
-import { PageInfo } from "../../../datastore/models/pagination";
+import { NextRequest, NextResponse } from 'next/server';
+import dayjs from 'dayjs';
+import AppDate from '../../../lib/date';
+import { getTasks, setTasks, getProjects, getUUID } from '../../../datastore';
+import { factory } from '../../../datastore/models';
+import { PageInfo } from '../../../datastore/models/pagination';
 
-function parse(dateString) {
+function parse(dateString: string) {
   if (!dateString) {
     return;
   }
 
   const [year, month, day] = dateString
-    .split("-")
+    .split('-')
     .map((str) => parseInt(str, 10));
   return new AppDate(new Date(year, month - 1, day));
 }
 
-export async function GET(request) {
+export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const page = searchParams.get("page") || 1;
-  const limit = searchParams.get("limit") || 20;
-  const status = searchParams.get("status") || ["scheduled"];
+  const page = Number(searchParams.get('page')) || 1;
+  const limit = Number(searchParams.get('limit')) || 20;
+  const status = searchParams.get('status') || ['scheduled'];
 
-  const tasks = getTasks().filter((it) => {
+  const tasks = getTasks().filter((it: any) => {
     return status.includes(it.status);
   });
 
-  tasks.sort((a, b) => {
+  tasks.sort((a: any, b: any) => {
     const aa = parse(a.deadline);
     const bb = parse(b.deadline);
-    return aa.isAfter(bb) ? 1 : -1;
+    return aa?.isAfter(bb as AppDate) ? 1 : -1;
   });
   const pageInfo = new PageInfo({
     page,
@@ -45,11 +45,11 @@ export async function GET(request) {
   });
 }
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
   const { projectId, ...rest } = await request.json();
 
   const tasks = getTasks();
-  const project = getProjects().find((it) => it.id === projectId);
+  const project = getProjects().find((it: any) => it.id === projectId);
 
   const task = factory.task({
     id: getUUID(),
@@ -66,7 +66,7 @@ export async function POST(request) {
       },
       {
         status: 400,
-      },
+      }
     );
   }
 
@@ -79,6 +79,6 @@ export async function POST(request) {
     },
     {
       status: 201,
-    },
+    }
   );
 }

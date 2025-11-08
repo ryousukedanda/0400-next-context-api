@@ -1,18 +1,18 @@
-import DateDecorator from "./date";
-import { Project, ProjectParams } from "./project";
-import { getProjects } from "../index";
-import { factory } from ".";
+import DateDecorator from './date';
+import { Project, ProjectParams } from './project';
+import { getProjects } from '../index';
+import { factory } from '.';
 
 const Status = {
-  initial: "initial",
-  scheduled: "scheduled",
-  completed: "completed",
-  archived: "archived",
+  initial: 'initial',
+  scheduled: 'scheduled',
+  completed: 'completed',
+  archived: 'archived',
 };
 
 export type StatusType = keyof typeof Status;
 
-type Kind = "task" | "milestone";
+type Kind = 'task' | 'milestone';
 
 export interface TaskParams {
   id: string;
@@ -91,15 +91,15 @@ export class TaskModel {
   }
 
   get isArchived() {
-    return this._raw.status === "archived";
+    return this._raw.status === 'archived';
   }
 
   get isCompleted() {
-    return this._raw.status === "completed";
+    return this._raw.status === 'completed';
   }
 
   get isMilestone() {
-    return this._raw.kind === "milestone";
+    return this._raw.kind === 'milestone';
   }
 
   params(): TaskParams | undefined {
@@ -109,7 +109,7 @@ export class TaskModel {
 
     return {
       ...JSON.parse(
-        JSON.stringify(this._raw, Object.getOwnPropertyNames(this._raw)),
+        JSON.stringify(this._raw, Object.getOwnPropertyNames(this._raw))
       ),
       parent: this._raw.project,
     };
@@ -138,45 +138,45 @@ export class TaskModel {
   }
 
   scheduled() {
-    return this.updateStatus("scheduled");
+    return this.updateStatus('scheduled');
   }
 
   complete() {
-    return this.updateStatus("completed");
+    return this.updateStatus('completed');
   }
 
   archive() {
-    return this.updateStatus("archived");
+    return this.updateStatus('archived');
   }
 
   reopen() {
-    return this.updateStatus("scheduled");
+    return this.updateStatus('scheduled');
   }
 
-  trancatedDescription(length = 30, delimiter = "...") {
+  trancatedDescription(length = 30, delimiter = '...') {
     if (!this._raw.description) {
-      return "";
+      return '';
     }
 
-    return this._raw.description.slice(0, length) + " " + delimiter;
+    return this._raw.description.slice(0, length) + ' ' + delimiter;
   }
 
   validate() {
     if (!this._raw.title) {
       return {
-        message: "Title is required",
+        message: 'Title is required',
       };
     }
 
     if (!this._raw.kind) {
       return {
-        message: "Kind is required",
+        message: 'Kind is required',
       };
     }
 
     if (!this._raw.status) {
       return {
-        message: "Status is required",
+        message: 'Status is required',
       };
     }
 
@@ -186,15 +186,17 @@ export class TaskModel {
   assign(params: Partial<TaskParams>) {
     const filtered: Partial<TaskParams> = {};
     Object.keys(params).forEach((key: any) => {
-      if (["description", "title", "status", "deadline"].includes(key)) {
+      if (
+        ['description', 'title', 'status', 'deadline', 'project'].includes(key)
+      ) {
         // @ts-ignore
         filtered[key] = params[key];
       }
 
-      if (key === "projectId") {
+      if (key === 'projectId') {
         const project = getProjects().find(
           // @ts-ignore
-          (project: Project) => project.id === params[key],
+          (project: Project) => project.id === params[key]
         );
         filtered.project = project;
       }

@@ -1,44 +1,43 @@
-export interface Kinds {
+import { PageInfoParams } from '@/api/datastore/models/pagination';
+
+interface Kinds {
   milestone: number;
   task: number;
   total: number;
 }
 
-export interface States {
+interface States {
   scheduled: number;
   completed: number;
   archived: number;
 }
 
-export interface ProjectStats {
+interface ProjectStats {
   total: number;
   kinds: Kinds;
   states: States;
 }
-export interface Project {
+
+export interface ProjectInfo {
   id: string;
   name: string;
   slug: string;
   goal: string;
-  shoudbe: string;
+  shouldbe: string;
   color: string;
   stats: ProjectStats;
   createdAt: string;
-  updaatedAt: string;
+  updatedAt: string;
   deadline: string;
   startedAt: string;
   finishedAt: string;
 }
 
-export interface PageInfo {
-  totalCount: number;
-  limit: number;
-  page: number;
-  hasNext: boolean;
-  hasPrevious: boolean;
+export interface Projects {
+  data: ProjectInfo[];
+  pageInfo: PageInfoParams;
 }
 
-export interface ProjectInfo {
-  data: Project[];
-  pageInfo?: PageInfo;
+export interface ProjectName {
+  name: string;
 }

@@ -4,17 +4,7 @@ import {
   LinearScale,
   BarElement,
   BarController,
-  Title,
-  Tooltip,
   Legend,
 } from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarController,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarController, BarElement, Legend);
