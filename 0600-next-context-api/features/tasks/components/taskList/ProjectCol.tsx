@@ -3,40 +3,30 @@
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useRef, useEffect } from 'react';
-import { TaskInfo } from '../types/tasks';
-import { updateTask } from '../repository';
-import DropDown from './DropDown';
-import { useProject } from '@/context/ProjectContext';
+import { TaskInfo } from '../../types/tasks';
+import { updateTask } from '../../repository';
+import DropDown from '../../../../app/components/elements/DropDown';
+import { useProject } from 'features/projects/context/ProjectProvider';
+import { useTask } from '../../context/TaskProvider';
+import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
 
 interface ProjectColProps {
   task: TaskInfo;
-  onUpdate: (task: TaskInfo) => void;
 }
 
-const ProjectCol = ({ task, onUpdate }: ProjectColProps) => {
+const ProjectCol = ({ task }: ProjectColProps) => {
   const [isOpenProjectDropDown, setIsOpenProjectDropDown] =
     useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const [, , onUpdateTask] = useTask();
   const [projectList] = useProject();
 
-  // 外クリックを検知してドロップダウンを閉じる
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpenProjectDropDown(false);
-      }
-    };
+  useClickOutside(menuRef, () => setIsOpenProjectDropDown(false));
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const handleChangeProject = async (value: string) => {
+  const handleUpdateTask = async (value: string) => {
     try {
       const res = await updateTask(task.id, { project: { name: value } });
-      onUpdate(res);
+      onUpdateTask(res);
     } catch (err) {
       console.log(err);
     } finally {
@@ -61,17 +51,14 @@ const ProjectCol = ({ task, onUpdate }: ProjectColProps) => {
 
         {/* ドロップダウン */}
         {isOpenProjectDropDown && (
-          <DropDown>
-            {projectList.map((project) => (
-              <li
-                key={project.id}
-                className="py-2 px-3 text-[12px] hover:bg-[#18e5af] hover:text-white hover:font-bold cursor-pointer"
-                onClick={() => handleChangeProject(project.name)}
-              >
-                {project.name}
-              </li>
-            ))}
-          </DropDown>
+          <DropDown
+            options={projectList.map((project) => ({
+              label: project.name,
+              value: project.id,
+            }))}
+            onSelect={(_value, label) => handleUpdateTask(label)}
+            onClickOutside={() => setIsOpenProjectDropDown}
+          />
         )}
       </div>
     </div>

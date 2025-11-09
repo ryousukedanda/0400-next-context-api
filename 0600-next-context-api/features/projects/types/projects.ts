@@ -12,7 +12,7 @@ interface States {
   archived: number;
 }
 
-interface ProjectStats {
+export interface ProjectStats {
   total: number;
   kinds: Kinds;
   states: States;

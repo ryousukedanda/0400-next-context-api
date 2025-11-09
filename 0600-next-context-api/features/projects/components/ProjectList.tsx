@@ -5,7 +5,7 @@ import {
   faFileLines,
 } from '@fortawesome/free-solid-svg-icons';
 import AppDate from '@/api/lib/date';
-import { useProject } from '@/context/ProjectContext';
+import { useProject } from 'features/projects/context/ProjectProvider';
 
 const ProjectList = () => {
   const [projectList] = useProject();

@@ -10,7 +10,7 @@ import {
   useState,
 } from 'react';
 
-interface ContextProps {
+interface ProjectProviderProps {
   children: ReactNode;
 }
 
@@ -21,7 +21,7 @@ type ProjectContextType = [
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
-const ProjectProvider = ({ children }: ContextProps) => {
+const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const [projectList, setProjectList] = useState<ProjectInfo[]>([]);
 
   useEffect(() => {

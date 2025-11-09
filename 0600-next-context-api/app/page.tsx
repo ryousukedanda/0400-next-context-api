@@ -5,17 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import Chart from 'features/chart/components/Chart';
 import ProjectList from 'features/projects/components/ProjectList';
-import { ProjectInfo } from 'features/projects/types/projects';
-import TaskList from 'features/tasks/components/TaskList';
-import { useEffect, useState } from 'react';
-import { getProjects } from './api/datastore';
-import { useProject } from './context/ProjectContext';
+import TaskList from 'features/tasks/components/taskList/TaskList';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Dashboard() {
-  const [projectList, setProjectList] = useProject();
-
   return (
     <div className="p-8 w-full h-full overflow-scroll bg-content">
       <div className="w-full h-full">
@@ -47,7 +41,7 @@ export default function Dashboard() {
           {/* taskList */}
           <div className="min-w-full py-4 px-0">
             <div className="w-full">
-              <TaskList projectList={projectList} />
+              <TaskList />
             </div>
           </div>
           {/* taskfooter */}

@@ -16,4 +16,21 @@
   --color-table-border: #e2e2e290;
   --color-overlay: #22222220;
   --color-shadow: #22222220;
+  --color-danger: #d64045;
+  --color-success: #66bda6;
+
+  /* amimation */
+  --animate-message: toast_slideinFormRight 0.2s ease-in-out;
+
+  @keyframes toast_slideinFormRight {
+    0% {
+      margin-left: 100%;
+    }
+    80% {
+      margin-left: -10%;
+    }
+    100% {
+      margin-left: 0;
+    }
+  }
 }

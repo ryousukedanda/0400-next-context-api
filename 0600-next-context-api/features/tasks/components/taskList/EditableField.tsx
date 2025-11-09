@@ -1,17 +1,18 @@
 'use client';
 import React, { useRef, useState } from 'react';
-import { TaskInfo } from '../types/tasks';
-import { updateTask } from '../repository';
+import { TaskInfo } from '../../types/tasks';
+import { updateTask } from '../../repository';
 import AppDate from '@/api/lib/date';
+import { useTask } from '../../context/TaskProvider';
 
 interface EditableFieldProps {
   type: string;
   task: TaskInfo;
-  onUpdate: (task: TaskInfo) => void;
 }
 
-const EditableField = ({ type, task, onUpdate }: EditableFieldProps) => {
+const EditableField = ({ type, task }: EditableFieldProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [, , onUpdateTask] = useTask();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const value =
     type === 'text'
@@ -40,7 +41,7 @@ const EditableField = ({ type, task, onUpdate }: EditableFieldProps) => {
     try {
       const key = type === 'text' ? 'title' : 'deadline';
       const res = await updateTask(task.id, { [key]: e.target.value });
-      onUpdate(res);
+      onUpdateTask(res);
     } catch (err) {
       console.log(err);
     } finally {

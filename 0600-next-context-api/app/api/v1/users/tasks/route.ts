@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
     createdAt: dayjs().format(),
     updatedAt: dayjs().format(),
   });
+
   const error = task.validate();
   if (error) {
     return NextResponse.json(

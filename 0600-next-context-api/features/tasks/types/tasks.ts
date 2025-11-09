@@ -23,10 +23,30 @@ export interface Tasks {
   pageInfo: PageInfo;
 }
 
+//update関数の引数
 export interface UpdateTask {
   project?: ProjectName;
   title?: string;
   description?: string;
   deadline?: string;
   status?: string;
+}
+
+//create関数の引数
+export interface CreateTask {
+  projectId: string | null;
+  title: string | null;
+  description: string;
+  deadline: string;
+  status: string | null;
+}
+
+//
+export interface TaskCreateState {
+  projectId: string | null;
+  projectName: string | null;
+  title: string | null;
+  description: string;
+  deadline: string;
+  status: string;
 }
