@@ -3,11 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { createTask } from '../../repository';
 import { TaskCreateState } from '../../types/tasks';
-import {
-  initialNewTask,
-  taskErrorMessage,
-  taskSuccessMessage,
-} from '../../constants/taskConstants';
+import { initialNewTask } from '../../constants/taskConstants';
 import TaskProjectField from './TaskProjectField';
 import TaskTitleField from './TaskTitleField';
 import TaskDescriptionField from './TaskDescriptionField';
@@ -34,11 +30,12 @@ const TaskCreateDialog = ({ onCloseDialog }: TaskCreateDialogProps) => {
     title: false,
     deadline: false,
   });
-  const [, setMessageState] = useMessage();
+  const [, , showMessage, hideMessage] = useMessage();
 
+  //外側クリック検知
   useClickOutside(DialogRef, () => onCloseDialog(false));
 
-  //バリデーション
+  //フォームのバリデーション
   const validate = (newTask: TaskCreateState): boolean => {
     let valid = true;
     const errors: ValidationErrorState = {
@@ -66,49 +63,27 @@ const TaskCreateDialog = ({ onCloseDialog }: TaskCreateDialogProps) => {
     return valid;
   };
 
-  //task登録関数
+  //task登録ハンドラーメソッド
   const handleCreateTask = async (newTask: TaskCreateState) => {
-    //入力値のバリデーション
     if (!validate(newTask)) return;
 
     try {
       //task登録
       await createTask(newTask);
       //タスク成功メッセージ表示
-      setMessageState((prev) => ({
-        ...prev,
-        type: 'success',
-        message: taskSuccessMessage,
-      }));
+      showMessage('success');
       //ダスク成功メッセージ非表示
-      setTimeout(() => {
-        setMessageState((prev) => ({
-          ...prev,
-          type: null,
-          message: '',
-        }));
-      }, 3000);
+      hideMessage();
       //ダイアログを閉ざす
       onCloseDialog(false);
     } catch (err) {
       //タスク失敗メッセージ表示
-      setMessageState((prev) => ({
-        ...prev,
-        type: 'error',
-        message: taskErrorMessage,
-      }));
+      showMessage('error');
       //タスク失敗メッセージ非表示
-      setTimeout(() => {
-        setMessageState((prev) => ({
-          ...prev,
-          type: null,
-          message: '',
-        }));
-      }, 3000);
+      hideMessage();
     }
   };
 
-  // TODO:コンポーネントでまとめれる
   return (
     <div className="block bg-overlay z-10 absolute top-0 w-full min-h-full">
       <div
@@ -162,7 +137,7 @@ const TaskCreateDialog = ({ onCloseDialog }: TaskCreateDialogProps) => {
                     className="mr-4 bg-secondary text-light shadow-[2px_2px_4px_1px_#1e514036] transition-shadow duration-500 cursor-pointer border-0 py-2 px-4 rounded-sm tracking-[1.4px] text-[10px] w-full hover:opacity-0.8 hover:shadow-[2px_2px_4px_1px_#22222220]"
                     onClick={() => onCloseDialog(false)}
                   >
-                    キャンセル
+                    <span className="text-[14px]">キャンセル</span>
                   </button>
                 </div>
               </div>

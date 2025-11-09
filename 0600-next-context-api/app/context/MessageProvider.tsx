@@ -1,4 +1,8 @@
 import {
+  taskErrorMessage,
+  taskSuccessMessage,
+} from 'features/tasks/constants/taskConstants';
+import {
   createContext,
   Dispatch,
   ReactNode,
@@ -16,9 +20,15 @@ export interface MessageState {
   message: string;
 }
 
+type showMessageType = (type: 'success' | 'error') => void;
+
+type hideMessageType = () => void;
+
 type MessageContextType = [
   MessageState,
-  Dispatch<SetStateAction<MessageState>>
+  Dispatch<SetStateAction<MessageState>>,
+  showMessageType,
+  hideMessageType
 ];
 
 const MessageContext = createContext<MessageContextType | undefined>(undefined);
@@ -28,8 +38,27 @@ const MessageProvider = ({ children }: MessageProviderProps) => {
     type: null,
     message: '',
   });
+
+  const showMessage = (type: 'success' | 'error') => {
+    const message = type === 'success' ? taskSuccessMessage : taskErrorMessage;
+    setMessageState({
+      type,
+      message,
+    });
+  };
+
+  const hideMessage = () => {
+    setTimeout(() => {
+      setMessageState({
+        type: null,
+        message: '',
+      });
+    }, 3000);
+  };
   return (
-    <MessageContext.Provider value={[messageState, setMessageState]}>
+    <MessageContext.Provider
+      value={[messageState, setMessageState, showMessage, hideMessage]}
+    >
       {children}
     </MessageContext.Provider>
   );

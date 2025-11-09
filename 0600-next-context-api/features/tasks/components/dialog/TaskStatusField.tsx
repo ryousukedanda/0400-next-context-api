@@ -1,6 +1,5 @@
 import { TaskCreateState } from 'features/tasks/types/tasks';
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { ValidationErrorState } from './TaskCreateDialog';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { statusOptions } from 'features/tasks/constants/taskConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
