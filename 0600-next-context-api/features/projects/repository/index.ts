@@ -1,12 +1,12 @@
-import { ProjectInfo, Projects } from 'features/projects/types/projects';
-import axios from 'axios';
-import { BASE_URL } from '@/constants/endPoint';
+import { instance } from '@/lib/axios';
+import { Projects } from 'features/projects/types/projects';
 
-export const getProjects = async (): Promise<ProjectInfo[]> => {
-  const res = await axios.get<Projects>(`${BASE_URL}/projects`);
+export const getProjects = async () => {
+  const res = await instance.get<Projects>('/projects');
   return res.data.data;
 };
 
 export const getProjectDetail = async (projectName: string) => {
-  const res = await axios.get(`${BASE_URL}/projects/${projectName}`);
+  const res = await instance.get<Projects>(`/projects/${projectName}`);
+  return res.data.data;
 };

@@ -1,35 +1,35 @@
 'use client';
 import './globals.css';
 import Header from '@/components/layouts/header/Header';
-import TaskCreateDialog from 'features/tasks/components/dialog/TaskCreateDialog';
 import ProjectProvider from '../features/projects/context/ProjectProvider';
 import Main from './components/layouts/Main';
 import { useState } from 'react';
 import TaskProvider from 'features/tasks/context/TaskProvider';
 import MessageProvider from './context/MessageProvider';
 import Message from './components/elements/Message';
+import TaskDialog from 'features/tasks/components/dialog/TaskDialog';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
   return (
     <html lang="en">
       <body>
-        <TaskProvider>
-          <ProjectProvider>
-            <MessageProvider>
-              <Header onClick={setIsOpenDialog} />
-              <Main children={children} />
+        <MessageProvider>
+          <TaskProvider>
+            <ProjectProvider>
+              <Header onClick={() => setIsOpenDialog(true)} />
+              <Main>{children}</Main>
               {isOpenDialog && (
-                <TaskCreateDialog onCloseDialog={setIsOpenDialog} />
+                <TaskDialog onClose={() => setIsOpenDialog(false)} />
               )}
               <Message />
-            </MessageProvider>
-          </ProjectProvider>
-        </TaskProvider>
+            </ProjectProvider>
+          </TaskProvider>
+        </MessageProvider>
       </body>
     </html>
   );

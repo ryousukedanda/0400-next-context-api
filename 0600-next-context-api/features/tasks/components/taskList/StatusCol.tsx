@@ -1,5 +1,4 @@
 'use client';
-
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useRef } from 'react';
@@ -7,8 +6,12 @@ import { TaskInfo } from '../../types/tasks';
 import { updateTask } from '../../repository';
 import DropDown from '../../../../app/components/elements/DropDown';
 import { useTask } from '../../context/TaskProvider';
-import { statusOptions } from 'features/tasks/constants/taskConstants';
+import {
+  statusOptions,
+  taskUpdateErrorMessage,
+} from 'features/tasks/constants/taskConstants';
 import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
+import { useMessage } from '@/context/MessageProvider';
 
 interface StatusColProps {
   task: TaskInfo;
@@ -18,6 +21,7 @@ const StatusCol = ({ task }: StatusColProps) => {
   const [isOpenStatusDropDown, setIsOpenStatusDropDown] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [, , onUpdateTask] = useTask();
+  const [, , showMessage] = useMessage();
 
   const statusLabel =
     statusOptions.find((s) => s.value === task.status)?.label ?? '不明';
@@ -29,7 +33,7 @@ const StatusCol = ({ task }: StatusColProps) => {
       const res = await updateTask(task.id, { status: value });
       onUpdateTask(res);
     } catch (err) {
-      console.log(err);
+      showMessage('error', taskUpdateErrorMessage);
     } finally {
       setIsOpenStatusDropDown(false);
     }
@@ -47,13 +51,13 @@ const StatusCol = ({ task }: StatusColProps) => {
           <FontAwesomeIcon icon={faCaretDown} className="w-[1em] h-[1em]" />
         </div>
         {/* ドロップダウンメニュー */}
-        {isOpenStatusDropDown && (
-          <DropDown
-            options={statusOptions}
-            onSelect={(value, _label) => handleChangeStatus(value)}
-            onClickOutside={() => setIsOpenStatusDropDown(false)}
-          />
-        )}
+
+        <DropDown
+          isOpen={isOpenStatusDropDown}
+          options={statusOptions}
+          onSelect={(value, _label) => handleChangeStatus(value)}
+          onClickOutside={() => setIsOpenStatusDropDown(false)}
+        />
       </div>
     </div>
   );

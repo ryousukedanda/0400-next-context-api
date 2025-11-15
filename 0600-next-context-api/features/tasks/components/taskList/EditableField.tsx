@@ -4,6 +4,10 @@ import { TaskInfo } from '../../types/tasks';
 import { updateTask } from '../../repository';
 import AppDate from '@/api/lib/date';
 import { useTask } from '../../context/TaskProvider';
+import { useMessage } from '@/context/MessageProvider';
+import { taskUpdateErrorMessage } from 'features/tasks/constants/taskConstants';
+import InputField from '@/components/elements/InputField';
+import DateInput from '@/components/elements/DateInput';
 
 interface EditableFieldProps {
   type: string;
@@ -11,8 +15,9 @@ interface EditableFieldProps {
 }
 
 const EditableField = ({ type, task }: EditableFieldProps) => {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [, , onUpdateTask] = useTask();
+  const [, , showMessage] = useMessage();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const value =
     type === 'text'
@@ -37,13 +42,13 @@ const EditableField = ({ type, task }: EditableFieldProps) => {
       return;
     }
 
-    //データ登録
+    //task更新
     try {
       const key = type === 'text' ? 'title' : 'deadline';
       const res = await updateTask(task.id, { [key]: e.target.value });
       onUpdateTask(res);
     } catch (err) {
-      console.log(err);
+      showMessage('error', taskUpdateErrorMessage);
     } finally {
       setIsEditing(false);
     }
@@ -56,13 +61,21 @@ const EditableField = ({ type, task }: EditableFieldProps) => {
           isEditing ? `visible h-auto w-auto` : `invisible h-0 w-0`
         } bg-[#fafafa] rounded-sm min-w-full border-0`}
       >
-        <input
-          type={type}
-          className="rounded-sm py-2 px-3 w-full font-light text-[12px] text-dark border-0 shadow-[0_0_4px_1px_#22222210] bg-[#fafafa min-w-full]"
-          defaultValue={value}
-          ref={inputRef}
-          onBlur={handleBlur}
-        />
+        {type === 'text' ? (
+          <InputField
+            defaultValue={value}
+            ref={inputRef}
+            onChange={handleBlur}
+            isEdit={true}
+          />
+        ) : (
+          <DateInput
+            defaultValue={value}
+            ref={inputRef}
+            onChange={handleBlur}
+            isEdit={true}
+          />
+        )}
       </div>
       <p
         className={`${

@@ -1,43 +1,42 @@
 import { getProjects } from '@/api/datastore';
+import { useMessage } from '@/context/MessageProvider';
 import { ProjectInfo } from 'features/projects/types/projects';
 import {
   createContext,
-  Dispatch,
   ReactNode,
-  SetStateAction,
   useContext,
   useEffect,
   useState,
 } from 'react';
+import { projectGetEroorMessage } from '../constants/projectConstants';
 
 interface ProjectProviderProps {
   children: ReactNode;
 }
 
-type ProjectContextType = [
-  ProjectInfo[], // ← 現在の状態（プロジェクトの配列）
-  Dispatch<SetStateAction<ProjectInfo[]>> // ← 状態を更新する関数
-];
+type ProjectContextType = [ProjectInfo[], () => Promise<void>];
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const [projectList, setProjectList] = useState<ProjectInfo[]>([]);
+  const [, , showMessage] = useMessage();
+
+  const fetchProjectList = async () => {
+    try {
+      const res = await getProjects();
+      setProjectList(res);
+    } catch (err) {
+      showMessage('error', projectGetEroorMessage);
+    }
+  };
 
   useEffect(() => {
-    const getProjectList = async () => {
-      try {
-        const res = await getProjects();
-        setProjectList(res);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getProjectList();
+    fetchProjectList();
   }, []);
 
   return (
-    <ProjectContext.Provider value={[projectList, setProjectList]}>
+    <ProjectContext.Provider value={[projectList, fetchProjectList]}>
       {children}
     </ProjectContext.Provider>
   );

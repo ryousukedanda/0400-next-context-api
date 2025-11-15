@@ -9,15 +9,17 @@ import DropDown from '../../../../app/components/elements/DropDown';
 import { useProject } from 'features/projects/context/ProjectProvider';
 import { useTask } from '../../context/TaskProvider';
 import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
+import { taskUpdateErrorMessage } from 'features/tasks/constants/taskConstants';
+import { useMessage } from '@/context/MessageProvider';
 
 interface ProjectColProps {
   task: TaskInfo;
 }
 
 const ProjectCol = ({ task }: ProjectColProps) => {
-  const [isOpenProjectDropDown, setIsOpenProjectDropDown] =
-    useState<boolean>(false);
+  const [isOpenProjectDropDown, setIsOpenProjectDropDown] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const [, , showMessage] = useMessage();
   const [, , onUpdateTask] = useTask();
   const [projectList] = useProject();
 
@@ -28,7 +30,7 @@ const ProjectCol = ({ task }: ProjectColProps) => {
       const res = await updateTask(task.id, { project: { name: value } });
       onUpdateTask(res);
     } catch (err) {
-      console.log(err);
+      showMessage('error', taskUpdateErrorMessage);
     } finally {
       setIsOpenProjectDropDown(false);
     }
@@ -50,16 +52,15 @@ const ProjectCol = ({ task }: ProjectColProps) => {
         </div>
 
         {/* ドロップダウン */}
-        {isOpenProjectDropDown && (
-          <DropDown
-            options={projectList.map((project) => ({
-              label: project.name,
-              value: project.id,
-            }))}
-            onSelect={(_value, label) => handleUpdateTask(label)}
-            onClickOutside={() => setIsOpenProjectDropDown}
-          />
-        )}
+        <DropDown
+          isOpen={isOpenProjectDropDown}
+          options={projectList.map((project) => ({
+            label: project.name,
+            value: project.id,
+          }))}
+          onSelect={(_value, label) => handleUpdateTask(label)}
+          onClickOutside={() => setIsOpenProjectDropDown}
+        />
       </div>
     </div>
   );

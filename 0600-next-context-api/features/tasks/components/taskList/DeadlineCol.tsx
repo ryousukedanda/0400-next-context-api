@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import EditableField from './EditableField';
 import { TaskInfo } from '../../types/tasks';
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TaskHeader = () => {
   return (
     <div className="flex border-b border-table-border">

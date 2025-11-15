@@ -7,11 +7,10 @@ import DropDown from '@/components/elements/DropDown';
 
 interface TaskProjectFieldProps {
   newTask: TaskCreateState;
-  onClick: Dispatch<SetStateAction<TaskCreateState>>;
+  onChange: Dispatch<SetStateAction<TaskCreateState>>;
 }
-const TaskStatusField = ({ newTask, onClick }: TaskProjectFieldProps) => {
-  const [isOpenStatusDropDown, setIsOpenStatusDropDown] =
-    useState<boolean>(false);
+const TaskStatusField = ({ newTask, onChange }: TaskProjectFieldProps) => {
+  const [isOpenStatusDropDown, setIsOpenStatusDropDown] = useState(false);
 
   const statusLabel =
     statusOptions.find((s) => s.value === newTask.status)?.label ?? '不明';
@@ -32,20 +31,18 @@ const TaskStatusField = ({ newTask, onClick }: TaskProjectFieldProps) => {
               <FontAwesomeIcon icon={faCaretDown} className="w-[1em] h-[1em]" />
             </div>
           </div>
-          {isOpenStatusDropDown && (
-            <DropDown
-              options={statusOptions}
-              onSelect={(value, _label, e) => {
-                e?.stopPropagation();
-                onClick((prev) => ({
-                  ...prev,
-                  status: value,
-                }));
-                setIsOpenStatusDropDown(false);
-              }}
-              onClickOutside={() => setIsOpenStatusDropDown(false)}
-            />
-          )}
+          <DropDown
+            isOpen={isOpenStatusDropDown}
+            options={statusOptions}
+            onSelect={(value, _label) => {
+              onChange((prev) => ({
+                ...prev,
+                status: value,
+              }));
+              setIsOpenStatusDropDown(false);
+            }}
+            onClickOutside={() => setIsOpenStatusDropDown(false)}
+          />
         </div>
       </div>
     </div>
