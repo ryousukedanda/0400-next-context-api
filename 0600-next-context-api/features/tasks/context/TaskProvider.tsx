@@ -9,6 +9,8 @@ import {
 } from 'react';
 import { TaskInfo } from '../types/tasks';
 import { getTasks } from '../repository';
+import { useMessage } from '@/context/MessageProvider';
+import { taskGetErrorMessage } from '../constants/taskConstants';
 
 interface TaskProviderProps {
   children: ReactNode;
@@ -22,6 +24,7 @@ const TaskContext = createContext<ProjectContextType | undefined>(undefined);
 
 const TaskProvider = ({ children }: TaskProviderProps) => {
   const [taskList, setTaskList] = useState<TaskInfo[]>([]);
+  const [, , showMessage] = useMessage();
 
   //taskList取得
   useEffect(() => {
@@ -30,7 +33,7 @@ const TaskProvider = ({ children }: TaskProviderProps) => {
         const res = await getTasks();
         setTaskList(res);
       } catch (err) {
-        console.log(err);
+        showMessage('error', taskGetErrorMessage);
       }
     };
     getTaskList();

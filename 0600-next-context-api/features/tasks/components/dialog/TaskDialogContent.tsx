@@ -1,0 +1,144 @@
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRef, useState } from 'react';
+import { createTask } from '../../repository';
+import { TaskCreateState } from '../../types/tasks';
+import {
+  getNextWeek,
+  taskAddErrorMessage,
+  taskAddSuccessMessage,
+} from '../../constants/taskConstants';
+import TaskProjectField from './TaskProjectField';
+import TaskTitleField from './TaskTitleField';
+import TaskDescriptionField from './TaskDescriptionField';
+import TaskDeadlineField from './TaskDeadlineField';
+import TaskStatusField from './TaskStatusField';
+import { useMessage } from '@/context/MessageProvider';
+
+export interface ValidationErrorState {
+  project: boolean;
+  title: boolean;
+  deadline: boolean;
+}
+
+interface TaskDialogContentProps {
+  onClose: () => void;
+}
+
+const TaskDialogContent = ({ onClose }: TaskDialogContentProps) => {
+  const [newTask, setNewTask] = useState<TaskCreateState>({
+    description: '',
+    deadline: getNextWeek(),
+    status: 'scheduled',
+  });
+
+  const [validationError, setValidationError] = useState<ValidationErrorState>({
+    project: false,
+    title: false,
+    deadline: false,
+  });
+  const [, , showMessage] = useMessage();
+
+  //フォームのバリデーション
+  const validate = (newTask: TaskCreateState): boolean => {
+    let valid = true;
+    const errors: ValidationErrorState = {
+      project: false,
+      title: false,
+      deadline: false,
+    };
+
+    if (!newTask.projectId) {
+      errors.project = true;
+      valid = false;
+    }
+
+    if (!newTask.title) {
+      errors.title = true;
+      valid = false;
+    }
+
+    if (!newTask.deadline) {
+      errors.deadline = true;
+      valid = false;
+    }
+
+    setValidationError(errors);
+    return valid;
+  };
+
+  //task登録ハンドラーメソッド
+  const handleCreateTask = async (newTask: TaskCreateState) => {
+    if (!validate(newTask)) return;
+
+    try {
+      //task登録
+      await createTask(newTask);
+      //タスク成功メッセージ表示
+      showMessage('success', taskAddSuccessMessage);
+      //ダイアログを閉ざす
+      onClose();
+    } catch (err) {
+      //タスク失敗メッセージ表示
+      showMessage('error', taskAddErrorMessage);
+    }
+  };
+
+  return (
+    <>
+      {/* ×ボタン */}
+      <div className="p-4 flex justify-end" onClick={() => onClose()}>
+        <FontAwesomeIcon
+          icon={faXmark}
+          className="text-[16px] cursor-pointer w-[1em] h-[1em]"
+        />
+      </div>
+      {/* フォーム */}
+      <div className="max-h-[80vh] overflow-y-scroll">
+        <div className="p-16">
+          <div className="m-auto w-160 font-light">
+            <div className="mb-12">
+              <h2 className="text-[14px] font-light">タスクを追加</h2>
+            </div>
+            <div className="mb-12">
+              <TaskProjectField
+                newTask={newTask}
+                onChange={setNewTask}
+                validationError={validationError}
+              />
+              <TaskTitleField
+                onChange={setNewTask}
+                validationError={validationError}
+              />
+              <TaskDescriptionField />
+              <TaskDeadlineField
+                onChange={setNewTask}
+                validationError={validationError}
+              />
+              <TaskStatusField newTask={newTask} onChange={setNewTask} />
+            </div>
+            {/* フッター */}
+            <div className="flex">
+              <div className="w-full flex h-12">
+                <button
+                  className="mr-4 bg-primary text-light shadow-[2px_2px_4px_1px_#1e514036] transition-colors duration-500 cursor-pointer border-0 py-2 px-4 rounded-sm tracking-[1.4px] text-[10px] w-full hover:bg-primary-darker hover:shadow-[2px_2px_4px_1px_#22222220]"
+                  onClick={() => handleCreateTask(newTask)}
+                >
+                  <span className="text-[14px]">作成</span>
+                </button>
+                <button
+                  className="mr-4 bg-secondary text-light shadow-[2px_2px_4px_1px_#1e514036] transition-shadow duration-500 cursor-pointer border-0 py-2 px-4 rounded-sm tracking-[1.4px] text-[10px] w-full hover:opacity-0.8 hover:shadow-[2px_2px_4px_1px_#22222220]"
+                  onClick={() => onClose()}
+                >
+                  <span className="text-[14px]">キャンセル</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default TaskDialogContent;

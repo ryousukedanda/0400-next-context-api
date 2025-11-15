@@ -1,30 +1,31 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ValidationErrorState } from './TaskCreateDialog';
+import { ValidationErrorState } from './TaskDialogContent';
 import { TaskCreateState } from 'features/tasks/types/tasks';
-import { nextWeek } from 'features/tasks/constants/taskConstants';
+import { getNextWeek } from 'features/tasks/constants/taskConstants';
+import DateInput from '@/components/elements/DateInput';
 
 interface TaskDeadlineFieldProps {
-  onClick: Dispatch<SetStateAction<TaskCreateState>>;
+  onChange: Dispatch<SetStateAction<TaskCreateState>>;
   validationError: ValidationErrorState;
 }
 const TaskDeadlineField = ({
-  onClick,
+  onChange,
   validationError,
 }: TaskDeadlineFieldProps) => {
+  const handleChangeTaskDeadline = (e: React.FocusEvent<HTMLInputElement>) => {
+    onChange((prev) => ({
+      ...prev,
+      deadline: e.target.value,
+    }));
+  };
   return (
     <div className="my-4 mx-0">
       <div className="text-[12px]">締切日</div>
       <div className="my-2 mx-0">
         <div>
-          <input
-            type="date"
-            defaultValue={nextWeek}
-            onBlur={(e) =>
-              onClick((prev) => ({
-                ...prev,
-                deadline: e.target.value,
-              }))
-            }
+          <DateInput
+            defaultValue={getNextWeek()}
+            onChange={handleChangeTaskDeadline}
           />
         </div>
         <div className={`${validationError.deadline ? 'block' : 'invisible'}`}>

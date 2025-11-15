@@ -1,13 +1,12 @@
 import DateDecorator, { now } from '@/api/datastore/models/date';
-import { TaskCreateState } from '../types/tasks';
 
-// 現在の日付
-const today = now();
-
-// 1週間後の日付を作る
-export const nextWeek = new DateDecorator(
-  today.date!.add(7, 'day').format('YYYY-MM-DD')
-).toString() as string;
+//1週間後の日付
+export const getNextWeek = (): string => {
+  const today = now();
+  return new DateDecorator(
+    today.date!.add(7, 'day').format('YYYY-MM-DD')
+  ).toString() as string;
+};
 
 export const statusOptions = [
   { label: '未完了', value: 'scheduled' },
@@ -15,15 +14,21 @@ export const statusOptions = [
   { label: 'アーカイブ済み', value: 'archived' },
 ];
 
-export const initialNewTask: TaskCreateState = {
-  projectId: null,
-  projectName: null,
-  title: null,
-  description: '',
-  deadline: nextWeek,
-  status: 'scheduled',
-};
+export const noSlectOption = [
+  { label: 'プログラムを選択してください', value: '0' },
+];
 
-export const taskSuccessMessage = 'タスクの追加に成功しました。';
+//エラメッセージ
+export const taskAddSuccessMessage = 'タスクの追加に成功しました。';
 
-export const taskErrorMessage = 'タスクの追加に失敗しました。';
+export const taskAddErrorMessage = 'タスクの追加に失敗しました。';
+
+export const taskGetErrorMessage = 'タスク一覧の取得に失敗しました。';
+
+export const taskUpdateErrorMessage = 'タスクの更新に失敗しました。';
+
+//タスク追加ダイアログのtitleフィールドのプレースホルダー
+export const titleFieldPlaceholder =
+  'タスクを入力。 例)  英会話レッスンの予約、React公式ドキュメントを1ページ読む';
+
+export const descriptionFieldPlaceholder = 'タスクの説明・メモ';

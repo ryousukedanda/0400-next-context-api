@@ -34,18 +34,18 @@ export interface UpdateTask {
 
 //create関数の引数
 export interface CreateTask {
-  projectId: string | null;
-  title: string | null;
+  projectId?: string;
+  title?: string;
   description: string;
   deadline: string;
-  status: string | null;
+  status?: string;
 }
 
 //
 export interface TaskCreateState {
-  projectId: string | null;
-  projectName: string | null;
-  title: string | null;
+  projectId?: string;
+  projectName?: string;
+  title?: string;
   description: string;
   deadline: string;
   status: string;
