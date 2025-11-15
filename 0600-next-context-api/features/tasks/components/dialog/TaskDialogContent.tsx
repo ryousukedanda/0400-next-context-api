@@ -1,6 +1,6 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { createTask } from '../../repository';
 import { TaskCreateState } from '../../types/tasks';
 import {
@@ -14,6 +14,7 @@ import TaskDescriptionField from './TaskDescriptionField';
 import TaskDeadlineField from './TaskDeadlineField';
 import TaskStatusField from './TaskStatusField';
 import { useMessage } from '@/context/MessageProvider';
+import { useModal } from '@/context/ModalProvider';
 
 export interface ValidationErrorState {
   project: boolean;
@@ -21,11 +22,7 @@ export interface ValidationErrorState {
   deadline: boolean;
 }
 
-interface TaskDialogContentProps {
-  onClose: () => void;
-}
-
-const TaskDialogContent = ({ onClose }: TaskDialogContentProps) => {
+const TaskDialogContent = () => {
   const [newTask, setNewTask] = useState<TaskCreateState>({
     description: '',
     deadline: getNextWeek(),
@@ -38,6 +35,7 @@ const TaskDialogContent = ({ onClose }: TaskDialogContentProps) => {
     deadline: false,
   });
   const [, , showMessage] = useMessage();
+  const { closeModal } = useModal();
 
   //フォームのバリデーション
   const validate = (newTask: TaskCreateState): boolean => {
@@ -77,7 +75,7 @@ const TaskDialogContent = ({ onClose }: TaskDialogContentProps) => {
       //タスク成功メッセージ表示
       showMessage('success', taskAddSuccessMessage);
       //ダイアログを閉ざす
-      onClose();
+      closeModal();
     } catch (err) {
       //タスク失敗メッセージ表示
       showMessage('error', taskAddErrorMessage);
@@ -87,7 +85,7 @@ const TaskDialogContent = ({ onClose }: TaskDialogContentProps) => {
   return (
     <>
       {/* ×ボタン */}
-      <div className="p-4 flex justify-end" onClick={() => onClose()}>
+      <div className="p-4 flex justify-end" onClick={closeModal}>
         <FontAwesomeIcon
           icon={faXmark}
           className="text-[16px] cursor-pointer w-[1em] h-[1em]"
@@ -110,7 +108,7 @@ const TaskDialogContent = ({ onClose }: TaskDialogContentProps) => {
                 onChange={setNewTask}
                 validationError={validationError}
               />
-              <TaskDescriptionField />
+              <TaskDescriptionField onChange={setNewTask} />
               <TaskDeadlineField
                 onChange={setNewTask}
                 validationError={validationError}
@@ -128,7 +126,7 @@ const TaskDialogContent = ({ onClose }: TaskDialogContentProps) => {
                 </button>
                 <button
                   className="mr-4 bg-secondary text-light shadow-[2px_2px_4px_1px_#1e514036] transition-shadow duration-500 cursor-pointer border-0 py-2 px-4 rounded-sm tracking-[1.4px] text-[10px] w-full hover:opacity-0.8 hover:shadow-[2px_2px_4px_1px_#22222220]"
-                  onClick={() => onClose()}
+                  onClick={closeModal}
                 >
                   <span className="text-[14px]">キャンセル</span>
                 </button>
