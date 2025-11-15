@@ -25,7 +25,7 @@ const TaskDeadlineField = ({
         <div>
           <DateInput
             defaultValue={getNextWeek()}
-            onChange={handleChangeTaskDeadline}
+            // onChange={handleChangeTaskDeadline}
           />
         </div>
         <div className={`${validationError.deadline ? 'block' : 'invisible'}`}>

@@ -1,12 +1,11 @@
 import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
-import { RefObject, useRef } from 'react';
+import { useRef } from 'react';
 
 interface option {
   label: string;
   value: string;
 }
 interface DropDownProps {
-  ignoreRef: RefObject<HTMLDivElement | null>;
   isOpen: boolean;
   options: option[];
   onSelect: (
@@ -18,7 +17,6 @@ interface DropDownProps {
 }
 
 const DropDown = ({
-  ignoreRef,
   options,
   onSelect,
   onClickOutside,
@@ -26,7 +24,7 @@ const DropDown = ({
 }: DropDownProps) => {
   const dropDownRef = useRef<HTMLDivElement | null>(null);
 
-  useClickOutside(dropDownRef, onClickOutside, ignoreRef);
+  useClickOutside(dropDownRef, onClickOutside, isOpen);
 
   return (
     <div

@@ -2,15 +2,15 @@
 
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { TaskInfo } from '../../types/tasks';
 import { updateTask } from '../../repository';
 import DropDown from '../../../../app/components/elements/DropDown';
-import { useProject } from 'features/projects/context/ProjectProvider';
 import { useTask } from '../../context/TaskProvider';
 import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
 import { taskUpdateErrorMessage } from 'features/tasks/constants/taskConstants';
 import { useMessage } from '@/context/MessageProvider';
+import useFetchProjects from 'features/projects/hooks/useFetchProjects';
 
 interface ProjectColProps {
   task: TaskInfo;
@@ -21,9 +21,13 @@ const ProjectCol = ({ task }: ProjectColProps) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [, , showMessage] = useMessage();
   const [, , onUpdateTask] = useTask();
-  const [projectList] = useProject();
+  const projectList = useFetchProjects();
 
-  useClickOutside(menuRef, () => setIsOpenProjectDropDown(false));
+  useClickOutside(
+    menuRef,
+    () => setIsOpenProjectDropDown(false),
+    isOpenProjectDropDown
+  );
 
   const handleUpdateTask = async (value: string) => {
     try {

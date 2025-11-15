@@ -26,7 +26,11 @@ const StatusCol = ({ task }: StatusColProps) => {
   const statusLabel =
     statusOptions.find((s) => s.value === task.status)?.label ?? '不明';
 
-  useClickOutside(menuRef, () => setIsOpenStatusDropDown(false));
+  useClickOutside(
+    menuRef,
+    () => setIsOpenStatusDropDown(false),
+    isOpenStatusDropDown
+  );
 
   const handleChangeStatus = async (value: string) => {
     try {

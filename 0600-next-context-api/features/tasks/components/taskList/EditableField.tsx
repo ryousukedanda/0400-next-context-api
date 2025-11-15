@@ -64,16 +64,16 @@ const EditableField = ({ type, task }: EditableFieldProps) => {
         {type === 'text' ? (
           <InputField
             defaultValue={value}
-            ref={inputRef}
-            onChange={handleBlur}
-            isEdit={true}
+            inputRef={inputRef}
+            onBlur={handleBlur}
+            extraStyle={'bg-[#fafafa] min-w-full'}
           />
         ) : (
           <DateInput
             defaultValue={value}
-            ref={inputRef}
-            onChange={handleBlur}
-            isEdit={true}
+            inputRef={inputRef}
+            onBlur={handleBlur}
+            extraStyle={'bg-[#fafafa] min-w-full'}
           />
         )}
       </div>

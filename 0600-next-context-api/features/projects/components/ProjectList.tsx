@@ -5,10 +5,10 @@ import {
   faFileLines,
 } from '@fortawesome/free-solid-svg-icons';
 import AppDate from '@/api/lib/date';
-import { useProject } from 'features/projects/context/ProjectProvider';
+import useFetchProjects from '../hooks/useFetchProjects';
 
 const ProjectList = () => {
-  const [projectList] = useProject();
+  const projectList = useFetchProjects();
 
   return (
     <div className="grow shrink mr-8 ">
