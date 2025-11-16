@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TaskCreateState } from 'features/tasks/types/tasks';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { ValidationErrorState } from './TaskDialogContent';
-import { useProject } from 'features/projects/context/ProjectProvider';
 import { noSlectOption } from 'features/tasks/constants/taskConstants';
+import useFetchProjects from 'features/projects/hooks/useFetchProjects';
 
 interface TaskProjectFieldProps {
   newTask: TaskCreateState;
@@ -19,7 +19,7 @@ const TaskProjectField = ({
   validationError,
 }: TaskProjectFieldProps) => {
   const [isOpenProjectDropDown, setIsOpenProjectDropDown] = useState(false);
-  const [projectList] = useProject();
+  const projectList = useFetchProjects();
   const ignoreRef = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -30,8 +30,6 @@ const TaskProjectField = ({
           className="flex justify-center items-center flex-col cursor-pointer"
           onClick={() =>
             setIsOpenProjectDropDown((prev) => {
-              console.log('発動');
-              console.log(prev);
               return !prev;
             })
           }
@@ -48,7 +46,6 @@ const TaskProjectField = ({
             </div>
           </div>
           <DropDown
-            ignoreRef={ignoreRef}
             isOpen={isOpenProjectDropDown}
             options={noSlectOption.concat(
               projectList.map((project) => ({

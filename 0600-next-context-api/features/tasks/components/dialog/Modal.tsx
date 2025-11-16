@@ -1,14 +1,15 @@
+import { useModal } from '@/context/ModalProvider';
 import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
-import React, { ReactNode, useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 
 interface ModalProps {
   children: ReactNode;
-  onClose: () => void;
 }
-const Modal = ({ children, onClose }: ModalProps) => {
+const Modal = ({ children }: ModalProps) => {
   const DialogRef = useRef<HTMLDivElement | null>(null);
+  const { openModal, closeModal } = useModal();
 
-  useClickOutside(DialogRef, onClose);
+  useClickOutside(DialogRef, closeModal, 'task' === openModal);
 
   return (
     <div className="block bg-overlay absolute z-10 top-0 w-full min-h-full">

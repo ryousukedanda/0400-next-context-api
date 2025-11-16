@@ -1,16 +1,15 @@
+import { useModal } from '@/context/ModalProvider';
 import Modal from './Modal';
 import TaskDialogContent from './TaskDialogContent';
 
-interface TaskDialog {
-  onClose: () => void;
-}
+const TaskDialog = () => {
+  const { openModal } = useModal();
 
-const TaskDialog = ({ onClose }: TaskDialog) => {
-  return (
-    <Modal onClose={onClose}>
-      <TaskDialogContent onClose={onClose} />
+  return openModal === 'task' ? (
+    <Modal>
+      <TaskDialogContent />
     </Modal>
-  );
+  ) : null;
 };
 
 export default TaskDialog;
