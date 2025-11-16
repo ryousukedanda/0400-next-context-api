@@ -66,14 +66,14 @@ const EditableField = ({ type, task }: EditableFieldProps) => {
             defaultValue={value}
             inputRef={inputRef}
             onBlur={handleBlur}
-            extraStyle={'bg-[#fafafa] min-w-full'}
+            className={'bg-[#fafafa] min-w-full'}
           />
         ) : (
           <DateInput
             defaultValue={value}
             inputRef={inputRef}
             onBlur={handleBlur}
-            extraStyle={'bg-[#fafafa] min-w-full'}
+            className={'bg-[#fafafa] min-w-full'}
           />
         )}
       </div>
