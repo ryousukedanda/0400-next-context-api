@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import SidebarProjectRow from './SidebarProjectRow';
-import { sidebarList } from '@/constants/constatns';
+import { sidebarList } from '@/constants';
 
 const SidebarRow = () => {
   return (

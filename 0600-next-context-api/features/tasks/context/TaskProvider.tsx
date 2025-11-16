@@ -1,3 +1,4 @@
+'use client';
 import {
   createContext,
   Dispatch,
@@ -7,7 +8,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { TaskInfo } from '../types/tasks';
+import { TaskInfo, Tasks } from '../types/tasks';
 import { getTasks } from '../repository';
 import { useMessage } from '@/context/MessageProvider';
 import { taskGetErrorMessage } from '../constants/taskConstants';
@@ -16,36 +17,44 @@ interface TaskProviderProps {
   children: ReactNode;
 }
 type ProjectContextType = [
-  TaskInfo[],
-  Dispatch<SetStateAction<TaskInfo[]>>,
-  (task: TaskInfo) => void
+  Tasks | null,
+  Dispatch<SetStateAction<Tasks | null>>,
+  (task: TaskInfo) => void,
+  (page?: number, limit?: number) => Promise<void>
 ];
 const TaskContext = createContext<ProjectContextType | undefined>(undefined);
 
 const TaskProvider = ({ children }: TaskProviderProps) => {
-  const [taskList, setTaskList] = useState<TaskInfo[]>([]);
+  const [tasks, setTasks] = useState<Tasks | null>(null);
   const [, , showMessage] = useMessage();
+
+  const fetchTasks = async (page?: number, limit?: number) => {
+    try {
+      const res = await getTasks(page, limit);
+      setTasks(res);
+    } catch (err) {
+      showMessage('error', taskGetErrorMessage);
+    }
+  };
 
   //taskList取得
   useEffect(() => {
-    const getTaskList = async () => {
-      try {
-        const res = await getTasks();
-        setTaskList(res);
-      } catch (err) {
-        showMessage('error', taskGetErrorMessage);
-      }
-    };
-    getTaskList();
+    fetchTasks();
   }, []);
 
   //task更新メソッド
   const onUpdateTask = (task: TaskInfo) => {
-    setTaskList((prev) => prev.map((it) => (it.id === task.id ? task : it)));
+    setTasks((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        data: prev.data.map((it) => (it.id === task.id ? task : it)),
+      };
+    });
   };
 
   return (
-    <TaskContext.Provider value={[taskList, setTaskList, onUpdateTask]}>
+    <TaskContext.Provider value={[tasks, setTasks, onUpdateTask, fetchTasks]}>
       {children}
     </TaskContext.Provider>
   );
