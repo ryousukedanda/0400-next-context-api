@@ -1,23 +1,28 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { TaskInfo } from '../../types/tasks';
 import { updateTask } from '../../repository';
 import AppDate from '@/api/lib/date';
-import { useTask } from '../../context/TaskProvider';
 import { useMessage } from '@/context/MessageProvider';
 import { taskUpdateErrorMessage } from 'features/tasks/constants/taskConstants';
-import InputField from '@/components/elements/InputField';
-import DateInput from '@/components/elements/DateInput';
+import UnControlledDateInput from '@/components/elements/UnControlledDateInput';
+import UnControlledInputField from '@/components/elements/UnControlledInputField';
 
 interface EditableFieldProps {
   type: string;
   task: TaskInfo;
+  onBlur?: Dispatch<SetStateAction<TaskInfo>>;
+  onUpdate?: (task: TaskInfo) => void;
 }
 
-const EditableField = ({ type, task }: EditableFieldProps) => {
+const EditableField = ({
+  type,
+  task,
+  onBlur,
+  onUpdate,
+}: EditableFieldProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [, , onUpdateTask] = useTask();
-  const [, , showMessage] = useMessage();
+  const { showMessage } = useMessage();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const value =
     type === 'text'
@@ -37,7 +42,19 @@ const EditableField = ({ type, task }: EditableFieldProps) => {
 
   //編集完了時
   const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    if (!e.target.value) {
+    const newValue = e.target.value;
+    if (!newValue) {
+      setIsEditing(false);
+      return;
+    }
+
+    //編集完了してもまだdbのtaskは更新しない
+    //更新ボタン押下でdb更新(tasks/[id])
+    if (onBlur) {
+      onBlur?.((prev) => ({
+        ...prev,
+        title: e.target.value,
+      }));
       setIsEditing(false);
       return;
     }
@@ -45,8 +62,8 @@ const EditableField = ({ type, task }: EditableFieldProps) => {
     //task更新
     try {
       const key = type === 'text' ? 'title' : 'deadline';
-      const res = await updateTask(task.id, { [key]: e.target.value });
-      onUpdateTask(res);
+      const res = await updateTask(task.id, { ...task, [key]: newValue });
+      onUpdate?.(res);
     } catch (err) {
       showMessage('error', taskUpdateErrorMessage);
     } finally {
@@ -62,14 +79,14 @@ const EditableField = ({ type, task }: EditableFieldProps) => {
         } bg-[#fafafa] rounded-sm min-w-full border-0`}
       >
         {type === 'text' ? (
-          <InputField
+          <UnControlledInputField
             defaultValue={value}
             inputRef={inputRef}
             onBlur={handleBlur}
             className={'bg-[#fafafa] min-w-full'}
           />
         ) : (
-          <DateInput
+          <UnControlledDateInput
             defaultValue={value}
             inputRef={inputRef}
             onBlur={handleBlur}

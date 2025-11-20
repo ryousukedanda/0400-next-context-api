@@ -1,12 +1,14 @@
 interface TextAreaProps {
+  value: string;
   onChange: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
   rows?: number;
   placeholder?: string;
 }
 
-const TextArea = ({ onChange, rows, placeholder }: TextAreaProps) => {
+const TextArea = ({ value, onChange, rows, placeholder }: TextAreaProps) => {
   return (
     <textarea
+      value={value}
       rows={rows}
       placeholder={placeholder}
       onChange={(e: React.FocusEvent<HTMLTextAreaElement>) => onChange(e)}

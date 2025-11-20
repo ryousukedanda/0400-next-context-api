@@ -1,28 +1,23 @@
+import { PageInfoParams } from '@/api/datastore/models/pagination';
 import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-interface PagenationProps {
-  hasNext?: boolean;
-  hasPrevious?: boolean;
-  pageArr: number[];
-  currentPage?: number;
-  previousPage?: number;
-  nextPage?: number;
-  limit?: number;
+interface PaginationProps {
+  pageInfo: PageInfoParams;
   onClick: (page?: number, limit?: number) => void;
 }
-const Pagenation = ({
-  hasNext,
-  hasPrevious,
-  pageArr,
-  currentPage,
-  previousPage,
-  nextPage,
-  limit,
-  onClick,
-}: PagenationProps) => {
+const Pagination = ({ pageInfo, onClick }: PaginationProps) => {
+  const limit = pageInfo.limit;
+  const currentPage = pageInfo.page;
+  const hasNext = pageInfo.hasNext;
+  const hasPrevious = pageInfo.hasPrevious;
+  const totalPage = Math.ceil((pageInfo.totalCount ?? 0) / (limit ?? 1));
+  const previousPage = (currentPage ?? 1) - 1;
+  const nextPage = (currentPage ?? 1) + 1;
+  const pageArr = Array.from({ length: totalPage }, (_, i) => i + 1);
+
   return (
     <div className="flex justify-end">
       <ul className="flex">
@@ -72,4 +67,4 @@ const Pagenation = ({
   );
 };
 
-export default Pagenation;
+export default Pagination;

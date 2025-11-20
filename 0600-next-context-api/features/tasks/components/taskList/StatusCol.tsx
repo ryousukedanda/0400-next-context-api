@@ -2,7 +2,7 @@
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useRef } from 'react';
-import { TaskInfo } from '../../types/tasks';
+import { StatusType, TaskInfo } from '../../types/tasks';
 import { updateTask } from '../../repository';
 import DropDown from '../../../../app/components/elements/DropDown';
 import { useTask } from '../../context/TaskProvider';
@@ -20,8 +20,8 @@ interface StatusColProps {
 const StatusCol = ({ task }: StatusColProps) => {
   const [isOpenStatusDropDown, setIsOpenStatusDropDown] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const [, , onUpdateTask] = useTask();
-  const [, , showMessage] = useMessage();
+  const { onUpdateTask } = useTask();
+  const { showMessage } = useMessage();
 
   const statusLabel =
     statusOptions.find((s) => s.value === task.status)?.label ?? '不明';
@@ -32,9 +32,9 @@ const StatusCol = ({ task }: StatusColProps) => {
     isOpenStatusDropDown
   );
 
-  const handleChangeStatus = async (value: string) => {
+  const handleChangeStatus = async (value: StatusType) => {
     try {
-      const res = await updateTask(task.id, { status: value });
+      const res = await updateTask(task.id, { ...task, status: value });
       onUpdateTask(res);
     } catch (err) {
       showMessage('error', taskUpdateErrorMessage);

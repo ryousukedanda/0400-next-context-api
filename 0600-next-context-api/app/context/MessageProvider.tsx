@@ -19,11 +19,11 @@ export interface MessageState {
 
 type showMessageType = (type: 'success' | 'error', message: string) => void;
 
-type MessageContextType = [
-  MessageState,
-  Dispatch<SetStateAction<MessageState>>,
-  showMessageType
-];
+interface MessageContextType {
+  messageState: MessageState;
+  setMessageState: Dispatch<SetStateAction<MessageState>>;
+  showMessage: showMessageType;
+}
 
 const MessageContext = createContext<MessageContextType | undefined>(undefined);
 
@@ -49,7 +49,7 @@ const MessageProvider = ({ children }: MessageProviderProps) => {
 
   return (
     <MessageContext.Provider
-      value={[messageState, setMessageState, showMessage]}
+      value={{ messageState, setMessageState, showMessage }}
     >
       {children}
     </MessageContext.Provider>

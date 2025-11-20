@@ -19,8 +19,8 @@ interface ProjectColProps {
 const ProjectCol = ({ task }: ProjectColProps) => {
   const [isOpenProjectDropDown, setIsOpenProjectDropDown] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const [, , showMessage] = useMessage();
-  const [, , onUpdateTask] = useTask();
+  const { showMessage } = useMessage();
+  const { onUpdateTask } = useTask();
   const projectList = useFetchProjects();
 
   useClickOutside(
@@ -31,7 +31,10 @@ const ProjectCol = ({ task }: ProjectColProps) => {
 
   const handleUpdateTask = async (value: string) => {
     try {
-      const res = await updateTask(task.id, { project: { name: value } });
+      const res = await updateTask(task.id, {
+        ...task,
+        project: { name: value, id: '' },
+      });
       onUpdateTask(res);
     } catch (err) {
       showMessage('error', taskUpdateErrorMessage);
