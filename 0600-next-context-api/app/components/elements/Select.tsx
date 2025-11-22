@@ -3,25 +3,25 @@ import { OptionsType } from '@/types';
 interface SelectProps {
   options: OptionsType[];
   label: string;
-  selectName?: string;
-  selectId: string;
+  name?: string;
+  id: string;
   onChange: (page?: number, limit?: number) => void;
   currentPage?: number;
 }
 const Select = ({
   options,
   label,
-  selectName,
-  selectId,
+  name,
+  id,
   onChange,
   currentPage,
 }: SelectProps) => {
   return (
     <>
-      <label htmlFor={selectId}>{label}</label>
+      <label htmlFor={id}>{label}</label>
       <select
-        name={selectName}
-        id={selectId}
+        name={name}
+        id={id}
         className="py-1 px-2 border-0 bg-[rgb(59, 59, 59)]"
         onChange={(e) => onChange(currentPage, Number(e.target.value))}
       >

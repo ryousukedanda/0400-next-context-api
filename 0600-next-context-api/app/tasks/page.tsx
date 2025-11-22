@@ -1,21 +1,15 @@
 'use client';
-import Pagenation from '@/components/elements/Pagenation';
+import Pagenation from '@/components/elements/Pagination';
 import Select from '@/components/elements/Select';
 import { limitLabel, limitOptions } from '@/constants';
 import TaskList from 'features/tasks/components/taskList/TaskList';
-
 import { useTask } from 'features/tasks/context/TaskProvider';
 
 const page = () => {
-  const [tasks, , , fetchTasks] = useTask();
-  const limit = tasks?.pageInfo.limit;
-  const currentPage = tasks?.pageInfo.page;
-  const hasNext = tasks?.pageInfo.hasNext;
-  const hasPrevious = tasks?.pageInfo.hasPrevious;
-  const totalPage = Math.ceil((tasks?.pageInfo.totalCount ?? 0) / (limit ?? 1));
-  const previousPage = (currentPage ?? 1) - 1;
-  const nextPage = (currentPage ?? 1) + 1;
-  const pageArr = Array.from({ length: totalPage }, (_, i) => i + 1);
+  const { pageInfo, fetchTasks } = useTask();
+  const limit = pageInfo.limit;
+  const currentPage = pageInfo.page;
+  const totalPage = Math.ceil((pageInfo.totalCount ?? 0) / (limit ?? 1));
 
   const handleFetchTasks = (page?: number, limit?: number) => {
     fetchTasks(page, limit);
@@ -40,33 +34,23 @@ const page = () => {
                     <Select
                       options={limitOptions}
                       label={limitLabel}
-                      selectId="limit"
+                      id="limit"
                       onChange={handleFetchTasks}
                       currentPage={currentPage}
                     />
                   </div>
                   <div>
                     <span className="inline-block mr-4">
-                      {tasks?.pageInfo.totalCount}
+                      {pageInfo.totalCount}
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center">{/* {謎のdiv} */}</div>
               </div>
             </div>
             {/* tasklist */}
             <TaskList />
             {/* {footer} */}
-            <Pagenation
-              hasNext={hasNext}
-              hasPrevious={hasPrevious}
-              pageArr={pageArr}
-              currentPage={currentPage}
-              previousPage={previousPage}
-              nextPage={nextPage}
-              limit={limit}
-              onClick={handleFetchTasks}
-            />
+            <Pagenation pageInfo={pageInfo} onClick={handleFetchTasks} />
           </div>
         </div>
       </div>
