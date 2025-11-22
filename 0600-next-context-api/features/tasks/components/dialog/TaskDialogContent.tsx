@@ -98,10 +98,6 @@ const TaskDialogContent = () => {
                   <span className="text-[14px]">キャンセル</span>
                 </button>
               </div>
-              <div className="cursor-pointer pl-8 py-0 pr-4">
-                <div className="flex justify-center items-center h-full"></div>
-                <p className="text-primary flex items-center">戻る</p>
-              </div>
             </div>
           </div>
         </div>

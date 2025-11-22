@@ -1,14 +1,6 @@
 'use client';
-import { Task } from '@/api/datastore/models/task';
 import { TaskInfo } from 'features/tasks/types/tasks';
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface ValidationErrorState {
   project: boolean;

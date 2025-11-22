@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { titleFieldPlaceholder } from 'features/tasks/constants/taskConstants';
 import { ValidationErrorState } from '@/context/ErrorProvider';
 import { TaskInfo } from 'features/tasks/types/tasks';
-import ControlledInputField from '@/components/elements/ControlledInputField';
+import InputField from '@/components/elements/InputField';
 
 interface TaskTitleFieldProps {
   newTask: TaskInfo;
@@ -27,7 +27,7 @@ const TaskTitleField = ({
       <div className="text-[12px]">タスク</div>
       <div className="my-2 mx-0">
         <div>
-          <ControlledInputField
+          <InputField
             value={newTask.title}
             placeholder={titleFieldPlaceholder}
             onChange={handleChangeTaskTitle}

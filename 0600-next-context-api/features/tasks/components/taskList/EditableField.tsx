@@ -5,8 +5,8 @@ import { updateTask } from '../../repository';
 import AppDate from '@/api/lib/date';
 import { useMessage } from '@/context/MessageProvider';
 import { taskUpdateErrorMessage } from 'features/tasks/constants/taskConstants';
-import UnControlledDateInput from '@/components/elements/UnControlledDateInput';
-import UnControlledInputField from '@/components/elements/UnControlledInputField';
+import DateInput from '@/components/elements/DataInput';
+import InputField from '@/components/elements/InputField';
 
 interface EditableFieldProps {
   type: string;
@@ -79,14 +79,14 @@ const EditableField = ({
         } bg-[#fafafa] rounded-sm min-w-full border-0`}
       >
         {type === 'text' ? (
-          <UnControlledInputField
+          <InputField
             defaultValue={value}
             inputRef={inputRef}
             onBlur={handleBlur}
             className={'bg-[#fafafa] min-w-full'}
           />
         ) : (
-          <UnControlledDateInput
+          <DateInput
             defaultValue={value}
             inputRef={inputRef}
             onBlur={handleBlur}

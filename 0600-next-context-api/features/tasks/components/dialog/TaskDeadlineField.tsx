@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { TaskInfo } from 'features/tasks/types/tasks';
 import { ValidationErrorState } from '@/context/ErrorProvider';
 import AppDate from '@/api/lib/date';
-import ControlledDateInput from '@/components/elements/ControlledDateInput';
+import DateInput from '@/components/elements/DataInput';
 
 interface TaskDeadlineFieldProps {
   newTask: TaskInfo;
@@ -25,7 +25,7 @@ const TaskDeadlineField = ({
       <div className="text-[12px]">締切日</div>
       <div className="my-2 mx-0">
         <div>
-          <ControlledDateInput
+          <DateInput
             onChange={handleChangeTaskDeadline}
             value={
               newTask.deadline
