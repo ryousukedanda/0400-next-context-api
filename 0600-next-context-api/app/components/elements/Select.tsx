@@ -5,17 +5,9 @@ interface SelectProps {
   label: string;
   name?: string;
   id: string;
-  onChange: (page?: number, limit?: number) => void;
-  currentPage?: number;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
-const Select = ({
-  options,
-  label,
-  name,
-  id,
-  onChange,
-  currentPage,
-}: SelectProps) => {
+const Select = ({ options, label, name, id, onChange }: SelectProps) => {
   return (
     <>
       <label htmlFor={id}>{label}</label>
@@ -23,7 +15,7 @@ const Select = ({
         name={name}
         id={id}
         className="py-1 px-2 border-0 bg-[rgb(59, 59, 59)]"
-        onChange={(e) => onChange(currentPage, Number(e.target.value))}
+        onChange={(e) => onChange(e)}
       >
         {options.map((option) => {
           return (

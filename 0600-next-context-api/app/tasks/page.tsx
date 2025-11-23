@@ -1,5 +1,5 @@
 'use client';
-import Pagenation from '@/components/elements/Pagination';
+import Pagination from '@/components/elements/Pagination';
 import Select from '@/components/elements/Select';
 import { limitLabel, limitOptions } from '@/constants';
 import TaskList from 'features/tasks/components/taskList/TaskList';
@@ -7,11 +7,17 @@ import { useTask } from 'features/tasks/context/TaskProvider';
 
 const page = () => {
   const { pageInfo, fetchTasks } = useTask();
-  const limit = pageInfo.limit;
+  const currentLimit = pageInfo.limit;
   const currentPage = pageInfo.page;
-  const totalPage = Math.ceil((pageInfo.totalCount ?? 0) / (limit ?? 1));
+  const totalPage = Math.ceil((pageInfo.totalCount ?? 0) / (currentLimit ?? 1));
 
-  const handleFetchTasks = (page?: number, limit?: number) => {
+  const handleFetchTasks = ({
+    page = 1, //Selectでlimitが変わったら、表示ページは1から
+    limit = currentLimit, //Pagination遷移時、現在のlimitを参照
+  }: {
+    page?: number;
+    limit?: number;
+  }) => {
     fetchTasks(page, limit);
   };
 
@@ -35,8 +41,10 @@ const page = () => {
                       options={limitOptions}
                       label={limitLabel}
                       id="limit"
-                      onChange={handleFetchTasks}
-                      currentPage={currentPage}
+                      onChange={(e) => {
+                        const limit = Number(e.target.value);
+                        handleFetchTasks({ limit });
+                      }}
                     />
                   </div>
                   <div>
@@ -50,7 +58,10 @@ const page = () => {
             {/* tasklist */}
             <TaskList />
             {/* {footer} */}
-            <Pagenation pageInfo={pageInfo} onClick={handleFetchTasks} />
+            <Pagination
+              pageInfo={pageInfo}
+              onClick={(page) => handleFetchTasks({ page })}
+            />
           </div>
         </div>
       </div>
