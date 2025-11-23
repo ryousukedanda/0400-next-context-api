@@ -22,7 +22,9 @@ const SidebarProjectRow = () => {
                 {project.name}
               </div>
               <span className="inline-block text-[10px] ml-8">
-                {AppDate.parse(project.deadline)?.toString()}
+                {project.deadline
+                  ? AppDate.parse(project.deadline)?.toString()
+                  : ''}
               </span>
             </div>
           </Link>

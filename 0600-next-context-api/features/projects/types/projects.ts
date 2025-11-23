@@ -21,16 +21,16 @@ export interface ProjectStats {
 export interface ProjectInfo {
   id: string;
   name: string;
-  slug: string;
-  goal: string;
-  shouldbe: string;
-  color: string;
-  stats: ProjectStats;
-  createdAt: string;
-  updatedAt: string;
-  deadline: string;
-  startedAt: string;
-  finishedAt: string;
+  slug?: string;
+  goal?: string;
+  shouldbe?: string;
+  color?: string;
+  stats?: ProjectStats;
+  createdAt?: string;
+  updatedAt?: string;
+  deadline?: string;
+  startedAt?: string;
+  finishedAt?: string;
 }
 
 export interface Projects {

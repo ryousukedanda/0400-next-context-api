@@ -1,16 +1,21 @@
-import { TaskCreateState } from 'features/tasks/types/tasks';
 import { Dispatch, SetStateAction } from 'react';
-import { ValidationErrorState } from './TaskDialogContent';
-import InputField from '@/components/elements/InputField';
 import { titleFieldPlaceholder } from 'features/tasks/constants/taskConstants';
+import { ValidationErrorState } from '@/context/ErrorProvider';
+import { TaskInfo } from 'features/tasks/types/tasks';
+import InputField from '@/components/elements/InputField';
 
 interface TaskTitleFieldProps {
-  onChange: Dispatch<SetStateAction<TaskCreateState>>;
+  newTask: TaskInfo;
+  onChange: Dispatch<SetStateAction<TaskInfo>>;
   validationError: ValidationErrorState;
 }
 
-const TaskTitleField = ({ onChange, validationError }: TaskTitleFieldProps) => {
-  const handleChangeTaskTitle = (e: React.FocusEvent<HTMLInputElement>) => {
+const TaskTitleField = ({
+  newTask,
+  onChange,
+  validationError,
+}: TaskTitleFieldProps) => {
+  const handleChangeTaskTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange((prev) => ({
       ...prev,
       title: e.target.value,
@@ -23,6 +28,7 @@ const TaskTitleField = ({ onChange, validationError }: TaskTitleFieldProps) => {
       <div className="my-2 mx-0">
         <div>
           <InputField
+            value={newTask.title}
             placeholder={titleFieldPlaceholder}
             onChange={handleChangeTaskTitle}
           />

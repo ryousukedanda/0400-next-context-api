@@ -6,7 +6,7 @@ import { projectGetEroorMessage } from '../constants/projectConstants';
 
 export const useFetchProjects = () => {
   const [projectList, setProjectList] = useState<ProjectInfo[]>([]);
-  const [, , showMessage] = useMessage();
+  const { showMessage } = useMessage();
 
   useEffect(() => {
     const fetchProjects = async () => {

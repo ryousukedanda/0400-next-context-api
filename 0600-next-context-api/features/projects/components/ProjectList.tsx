@@ -36,7 +36,9 @@ const ProjectList = () => {
                       className="w-2.5! h-2.5! inline-block mr-2 relative top-0"
                     />
                     <p className="text-[10px] font-bold">
-                      {AppDate.parse(project.createdAt)?.toString()}
+                      {project.createdAt
+                        ? AppDate.parse(project.createdAt)?.toString()
+                        : ''}
                     </p>
                   </div>
                 </div>

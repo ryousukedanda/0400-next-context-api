@@ -1,27 +1,28 @@
 import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
 import { useRef } from 'react';
 
-interface option {
+interface Option<V extends string = string> {
   label: string;
-  value: string;
+  value: V;
 }
-interface DropDownProps {
+interface DropDownProps<V extends string = string> {
   isOpen: boolean;
-  options: option[];
+  options: Option<V>[];
   onSelect: (
-    value: string,
+    value: V,
     label: string,
     e?: React.MouseEvent<HTMLLIElement>
   ) => void;
   onClickOutside: () => void;
 }
 
-const DropDown = ({
+// ジェネリックとして定義
+const DropDown = <V extends string = string>({
   options,
   onSelect,
   onClickOutside,
   isOpen,
-}: DropDownProps) => {
+}: DropDownProps<V>) => {
   const dropDownRef = useRef<HTMLDivElement | null>(null);
 
   useClickOutside(dropDownRef, onClickOutside, isOpen);

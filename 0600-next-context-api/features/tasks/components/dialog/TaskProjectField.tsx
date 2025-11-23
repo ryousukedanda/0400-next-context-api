@@ -1,15 +1,15 @@
 import DropDown from '@/components/elements/DropDown';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TaskCreateState } from 'features/tasks/types/tasks';
+import { TaskInfo } from 'features/tasks/types/tasks';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { ValidationErrorState } from './TaskDialogContent';
 import { noSlectOption } from 'features/tasks/constants/taskConstants';
 import useFetchProjects from 'features/projects/hooks/useFetchProjects';
+import { ValidationErrorState } from '@/context/ErrorProvider';
 
 interface TaskProjectFieldProps {
-  newTask: TaskCreateState;
-  onChange: Dispatch<SetStateAction<TaskCreateState>>;
+  newTask: TaskInfo;
+  onChange: Dispatch<SetStateAction<TaskInfo>>;
   validationError: ValidationErrorState;
 }
 
@@ -37,9 +37,9 @@ const TaskProjectField = ({
         >
           <div className="flex items-center bg-light2 rounded-sm p-2 justify-between w-full border-0 shadow-[0_0_4px_1px_#22222210]">
             <p className="text-[12px]">
-              {!newTask.projectName
+              {!newTask?.project.name
                 ? noSlectOption[0].label
-                : newTask.projectName}
+                : newTask.project.name}
             </p>
             <div className="flex justify-center items-center h-full">
               <FontAwesomeIcon icon={faCaretDown} className="w-[1em] h-[1em]" />
@@ -56,8 +56,7 @@ const TaskProjectField = ({
             onSelect={(value, label) => {
               onChange((prev) => ({
                 ...prev,
-                projectName: label,
-                projectId: value,
+                project: { name: label, id: value },
               }));
               setIsOpenProjectDropDown(false);
             }}
