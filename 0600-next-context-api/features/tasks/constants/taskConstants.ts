@@ -16,7 +16,7 @@ export const statusOptions: { label: string; value: StatusType }[] = [
 ];
 
 export const noSlectOption = [
-  { label: 'プログラムを選択してください', value: '0' },
+  { label: 'プログラムを選択してください', value: '' },
 ];
 
 //エラメッセージ
