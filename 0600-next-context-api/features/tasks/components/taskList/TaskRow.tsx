@@ -7,11 +7,11 @@ import DetailCol from './DetailCol';
 import { useTask } from '../../context/TaskProvider';
 
 const TaskRow = () => {
-  const [taskList] = useTask();
+  const [tasks] = useTask();
 
   return (
     <div>
-      {taskList.map((task) => {
+      {tasks?.data.map((task) => {
         return (
           <div
             key={task.id}

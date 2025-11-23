@@ -1,4 +1,4 @@
-import { PageInfo } from '@/api/datastore/models/pagination';
+import { PageInfoParams } from '@/api/datastore/models/pagination';
 import { ProjectInfo, ProjectName } from 'features/projects/types/projects';
 
 export interface TaskInfo {
@@ -20,7 +20,7 @@ export interface TaskInfo {
 
 export interface Tasks {
   data: TaskInfo[];
-  pageInfo: PageInfo;
+  pageInfo: PageInfoParams;
 }
 
 //update関数の引数

@@ -2,9 +2,12 @@ import { CreateTask, TaskInfo, Tasks, UpdateTask } from '../types/tasks';
 import { instance } from '@/lib/axios';
 
 //タスクリスト取得
-export const getTasks = async (): Promise<TaskInfo[]> => {
-  const res = await instance.get<Tasks>('/tasks');
-  return res.data.data;
+export const getTasks = async (
+  page?: number,
+  limit?: number
+): Promise<Tasks> => {
+  const res = await instance.get<Tasks>('/tasks', { params: { page, limit } });
+  return res.data;
 };
 
 //タスク詳細取得

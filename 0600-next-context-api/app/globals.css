@@ -18,6 +18,7 @@
   --color-shadow: #22222220;
   --color-danger: #d64045;
   --color-success: #66bda6;
+  --color-table: #e2e2e290;
 
   /* amimation */
   --animate-message: toast_slideinFormRight 0.2s ease-in-out;
