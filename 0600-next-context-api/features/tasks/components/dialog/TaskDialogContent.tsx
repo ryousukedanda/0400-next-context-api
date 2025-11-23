@@ -2,8 +2,8 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { createTask } from '../../repository';
-import { TaskCreateState } from '../../types/tasks';
 import {
+  defaultTask,
   getNextWeek,
   taskAddErrorMessage,
   taskAddSuccessMessage,
@@ -15,58 +15,20 @@ import TaskDeadlineField from './TaskDeadlineField';
 import TaskStatusField from './TaskStatusField';
 import { useMessage } from '@/context/MessageProvider';
 import { useModal } from '@/context/ModalProvider';
-
-export interface ValidationErrorState {
-  project: boolean;
-  title: boolean;
-  deadline: boolean;
-}
+import { useError } from '@/context/ErrorProvider';
+import { TaskInfo } from 'features/tasks/types/tasks';
 
 const TaskDialogContent = () => {
-  const [newTask, setNewTask] = useState<TaskCreateState>({
-    description: '',
+  const [newTask, setNewTask] = useState<TaskInfo>({
+    ...defaultTask,
     deadline: getNextWeek(),
-    status: 'scheduled',
   });
-
-  const [validationError, setValidationError] = useState<ValidationErrorState>({
-    project: false,
-    title: false,
-    deadline: false,
-  });
-  const [, , showMessage] = useMessage();
+  const { showMessage } = useMessage();
   const { closeModal } = useModal();
-
-  //フォームのバリデーション
-  const validate = (newTask: TaskCreateState): boolean => {
-    let valid = true;
-    const errors: ValidationErrorState = {
-      project: false,
-      title: false,
-      deadline: false,
-    };
-
-    if (!newTask.projectId) {
-      errors.project = true;
-      valid = false;
-    }
-
-    if (!newTask.title) {
-      errors.title = true;
-      valid = false;
-    }
-
-    if (!newTask.deadline) {
-      errors.deadline = true;
-      valid = false;
-    }
-
-    setValidationError(errors);
-    return valid;
-  };
+  const { validate, validationError } = useError();
 
   //task登録ハンドラーメソッド
-  const handleCreateTask = async (newTask: TaskCreateState) => {
+  const handleCreateTask = async (newTask: TaskInfo) => {
     if (!validate(newTask)) return;
 
     try {
@@ -105,11 +67,16 @@ const TaskDialogContent = () => {
                 validationError={validationError}
               />
               <TaskTitleField
+                newTask={newTask}
                 onChange={setNewTask}
                 validationError={validationError}
               />
-              <TaskDescriptionField onChange={setNewTask} />
+              <TaskDescriptionField
+                value={newTask.description}
+                onChange={setNewTask}
+              />
               <TaskDeadlineField
+                newTask={newTask}
                 onChange={setNewTask}
                 validationError={validationError}
               />

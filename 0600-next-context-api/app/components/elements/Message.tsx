@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Message = () => {
-  const [messageState] = useMessage();
+  const { messageState } = useMessage();
 
   return (
     <ul className="top-8 right-8 absolute">

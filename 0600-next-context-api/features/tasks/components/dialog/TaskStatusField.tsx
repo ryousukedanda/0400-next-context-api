@@ -1,13 +1,13 @@
-import { TaskCreateState } from 'features/tasks/types/tasks';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { statusOptions } from 'features/tasks/constants/taskConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import DropDown from '@/components/elements/DropDown';
+import { StatusType, TaskInfo } from 'features/tasks/types/tasks';
 
 interface TaskProjectFieldProps {
-  newTask: TaskCreateState;
-  onChange: Dispatch<SetStateAction<TaskCreateState>>;
+  newTask: TaskInfo;
+  onChange: Dispatch<SetStateAction<TaskInfo>>;
 }
 const TaskStatusField = ({ newTask, onChange }: TaskProjectFieldProps) => {
   const [isOpenStatusDropDown, setIsOpenStatusDropDown] = useState(false);
@@ -24,14 +24,12 @@ const TaskStatusField = ({ newTask, onChange }: TaskProjectFieldProps) => {
           onClick={() => setIsOpenStatusDropDown(true)}
         >
           <div className="flex items-center bg-light2 rounded-sm p-2 justify-between w-full border-0 shadow-[0_0_4px_1px_#22222210]">
-            <p className="text-[12px]">
-              {newTask.status === '' ? '未完了' : statusLabel}
-            </p>
+            <p className="text-[12px]">{statusLabel}</p>
             <div className="flex justify-center items-center h-full">
               <FontAwesomeIcon icon={faCaretDown} className="w-[1em] h-[1em]" />
             </div>
           </div>
-          <DropDown
+          <DropDown<StatusType>
             isOpen={isOpenStatusDropDown}
             options={statusOptions}
             onSelect={(value, _label) => {

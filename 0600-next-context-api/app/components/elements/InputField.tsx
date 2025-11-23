@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface InputFieldProps {
+  value?: string;
   defaultValue?: string;
   inputRef?: React.RefObject<HTMLInputElement | null>;
   placeholder?: string;
@@ -9,6 +10,7 @@ interface InputFieldProps {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void | Promise<void>;
 }
 const InputField = ({
+  value,
   defaultValue,
   inputRef,
   placeholder,
@@ -19,6 +21,7 @@ const InputField = ({
   return (
     <input
       type="text"
+      value={value}
       defaultValue={defaultValue}
       ref={inputRef}
       className={`rounded-sm py-2 px-3 w-full font-light text-[12px] text-dark border-0 shadow-[0_0_4px_1px_#22222210] ${className}`}

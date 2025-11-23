@@ -5,13 +5,19 @@ import StatusCol from './StatusCol';
 import DeadlineCol from './DeadlineCol';
 import DetailCol from './DetailCol';
 import { useTask } from '../../context/TaskProvider';
+import { useEffect } from 'react';
 
 const TaskRow = () => {
-  const [tasks] = useTask();
+  const { tasks, fetchTasks } = useTask();
+
+  //taskList取得
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
     <div>
-      {tasks?.data.map((task) => {
+      {tasks.map((task) => {
         return (
           <div
             key={task.id}
@@ -21,7 +27,7 @@ const TaskRow = () => {
             <ProjectCol task={task} />
             <StatusCol task={task} />
             <DeadlineCol task={task} />
-            <DetailCol />
+            <DetailCol id={task.id} />
           </div>
         );
       })}

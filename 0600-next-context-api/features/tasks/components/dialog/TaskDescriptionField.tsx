@@ -1,12 +1,17 @@
 import TextArea from '@/components/elements/TextArea';
 import { descriptionFieldPlaceholder } from 'features/tasks/constants/taskConstants';
-import { TaskCreateState } from 'features/tasks/types/tasks';
+import { TaskInfo } from 'features/tasks/types/tasks';
 import { Dispatch, SetStateAction } from 'react';
 
 interface TaskDescriptionFieldProps {
-  onChange: Dispatch<SetStateAction<TaskCreateState>>;
+  onChange: Dispatch<SetStateAction<TaskInfo>>;
+  value: string;
 }
-const TaskDescriptionField = ({ onChange }: TaskDescriptionFieldProps) => {
+
+const TaskDescriptionField = ({
+  onChange,
+  value,
+}: TaskDescriptionFieldProps) => {
   const handleChangeTaskDescription = (
     e: React.FocusEvent<HTMLTextAreaElement>
   ) => {
@@ -21,6 +26,7 @@ const TaskDescriptionField = ({ onChange }: TaskDescriptionFieldProps) => {
       <div className="my-4 mx-0">
         <div>
           <TextArea
+            value={value}
             rows={5}
             placeholder={descriptionFieldPlaceholder}
             onChange={handleChangeTaskDescription}

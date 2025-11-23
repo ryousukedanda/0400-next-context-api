@@ -3,7 +3,6 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from 'next/link';
 import { useState } from 'react';
 import SidebarRow from './SidebarRow';
 const activeClass = 'text-dark font-bold';

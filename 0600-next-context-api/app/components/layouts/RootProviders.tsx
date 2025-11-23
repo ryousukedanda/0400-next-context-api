@@ -1,3 +1,4 @@
+import { ErrorProvider } from '@/context/ErrorProvider';
 import MessageProvider from '@/context/MessageProvider';
 import { ModalProvider } from '@/context/ModalProvider';
 import TaskProvider from 'features/tasks/context/TaskProvider';
@@ -10,7 +11,9 @@ const RootProviders = ({ children }: RootProvidersProps) => {
   return (
     <ModalProvider>
       <MessageProvider>
-        <TaskProvider>{children}</TaskProvider>
+        <ErrorProvider>
+          <TaskProvider>{children}</TaskProvider>
+        </ErrorProvider>
       </MessageProvider>
     </ModalProvider>
   );
