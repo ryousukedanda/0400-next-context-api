@@ -17,7 +17,7 @@ export const getTaskDetail = async (id: string) => {
 };
 
 //タスク更新
-export const updateTask = async (
+export const patchTask = async (
   id: string,
   updatedTask: TaskInfo
 ): Promise<TaskInfo> => {

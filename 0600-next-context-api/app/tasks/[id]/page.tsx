@@ -20,7 +20,7 @@ import {
 import {
   deleteTask,
   getTaskDetail,
-  updateTask,
+  patchTask,
 } from 'features/tasks/repository';
 import { TaskInfo } from 'features/tasks/types/tasks';
 import { useRouter } from 'next/navigation';
@@ -28,7 +28,8 @@ import { use, useEffect, useState } from 'react';
 
 const page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
-  const [updateTasks, setUpdateTasks] = useState<TaskInfo>(defaultTask);
+  const [updateTask, setUpdateTask] = useState<TaskInfo>(defaultTask);
+  const [initailTask, setInitialTask] = useState<TaskInfo>(defaultTask);
   const router = useRouter();
   const { showMessage } = useMessage();
   const { validationError, validate } = useError();
@@ -36,7 +37,8 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
   const fetchTaskDetail = async (id: string) => {
     try {
       const res = await getTaskDetail(id);
-      setUpdateTasks(res);
+      setUpdateTask(res);
+      setInitialTask(res);
     } catch (err) {
       showMessage('error', taskGetErrorMessage);
     }
@@ -52,7 +54,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
 
     try {
       //task登録
-      await updateTask(id, newTask);
+      await patchTask(id, newTask);
       //タスク成功メッセージ表示
       showMessage('success', taskUpdateSuccessMessage);
     } catch (err) {
@@ -79,9 +81,8 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
   };
 
   //リセット
-  const handleReset = async () => {
-    const res = await getTaskDetail(id);
-    setUpdateTasks(res);
+  const handleReset = () => {
+    setUpdateTask(initailTask);
   };
 
   return (
@@ -94,8 +95,8 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
               <h2 className="text-[20px] font-medium">
                 <EditableField
                   type="text"
-                  task={updateTasks}
-                  onBlur={setUpdateTasks}
+                  task={updateTask}
+                  onBlur={setUpdateTask}
                 />
               </h2>
               <div
@@ -111,16 +112,16 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
               <div className="mr-4">
                 <div>
                   作成日時:
-                  {updateTasks?.createdAt
-                    ? AppDate.parse(updateTasks.createdAt)?.toString()
+                  {updateTask?.createdAt
+                    ? AppDate.parse(updateTask.createdAt)?.toString()
                     : ''}
                 </div>
               </div>
               <div className="mr-4">
                 <div>
                   更新日時:
-                  {updateTasks?.updatedAt
-                    ? AppDate.parse(updateTasks.updatedAt)?.toString()
+                  {updateTask?.updatedAt
+                    ? AppDate.parse(updateTask.updatedAt)?.toString()
                     : ''}
                 </div>
               </div>
@@ -129,20 +130,20 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
           {/* form */}
           <div className="mb-12">
             <TaskProjectField
-              newTask={updateTasks}
-              onChange={setUpdateTasks}
+              newTask={updateTask}
+              onChange={setUpdateTask}
               validationError={validationError}
             />
             <TaskDeadlineField
-              newTask={updateTasks}
-              onChange={setUpdateTasks}
+              newTask={updateTask}
+              onChange={setUpdateTask}
               validationError={validationError}
             />
-            <TaskStatusField newTask={updateTasks} onChange={setUpdateTasks} />
+            <TaskStatusField newTask={updateTask} onChange={setUpdateTask} />
 
             <TaskDescriptionField
-              value={updateTasks.description}
-              onChange={setUpdateTasks}
+              value={updateTask.description}
+              onChange={setUpdateTask}
             />
           </div>
           {/* footer(button) */}
@@ -150,20 +151,20 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
             <div className="w-full flex h-12">
               <button
                 className="mr-4 bg-primary text-light shadow-[2px_2px_4px_1px_#1e514036] transition-colors duration-500 cursor-pointer border-0 py-2 px-4 rounded-sm tracking-[1.4px] text-[10px] w-full hover:bg-primary-darker hover:shadow-[2px_2px_4px_1px_#22222220]"
-                onClick={() => handleUpdateTask(updateTasks)}
+                onClick={() => handleUpdateTask(updateTask)}
               >
                 <span className="text-[14px]">更新</span>
               </button>
               <button
                 className="mr-4 bg-secondary text-light shadow-[2px_2px_4px_1px_#1e514036] transition-shadow duration-500 cursor-pointer border-0 py-2 px-4 rounded-sm tracking-[1.4px] text-[10px] w-full hover:opacity-0.8 hover:shadow-[2px_2px_4px_1px_#22222220]"
-                onClick={() => handleReset()}
+                onClick={handleReset}
               >
                 <span className="text-[14px]">リセット</span>
               </button>
             </div>
             <div
               className="cursor-pointer pt-8 px-0 pb-4"
-              onClick={() => router.back()}
+              onClick={router.back}
             >
               <div className="text-primary flex items-center">
                 <div className="flex justify-center items-center h-full">
