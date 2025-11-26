@@ -4,7 +4,7 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useRef } from 'react';
 import { TaskInfo } from '../../types/tasks';
-import { updateTask } from '../../repository';
+import { patchTask } from '../../repository';
 import DropDown from '../../../../app/components/elements/DropDown';
 import { useTask } from '../../context/TaskProvider';
 import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
@@ -31,7 +31,7 @@ const ProjectCol = ({ task }: ProjectColProps) => {
 
   const handleUpdateTask = async (value: string) => {
     try {
-      const res = await updateTask(task.id, {
+      const res = await patchTask(task.id, {
         ...task,
         project: { name: value, id: '' },
       });

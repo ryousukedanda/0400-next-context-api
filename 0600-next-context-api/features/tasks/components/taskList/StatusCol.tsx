@@ -3,7 +3,7 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useRef } from 'react';
 import { StatusType, TaskInfo } from '../../types/tasks';
-import { updateTask } from '../../repository';
+import { patchTask } from '../../repository';
 import DropDown from '../../../../app/components/elements/DropDown';
 import { useTask } from '../../context/TaskProvider';
 import {
@@ -34,7 +34,7 @@ const StatusCol = ({ task }: StatusColProps) => {
 
   const handleChangeStatus = async (value: StatusType) => {
     try {
-      const res = await updateTask(task.id, { ...task, status: value });
+      const res = await patchTask(task.id, { ...task, status: value });
       onUpdateTask(res);
     } catch (err) {
       showMessage('error', taskUpdateErrorMessage);

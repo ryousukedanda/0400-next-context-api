@@ -1,7 +1,7 @@
 'use client';
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { TaskInfo } from '../../types/tasks';
-import { updateTask } from '../../repository';
+import { patchTask } from '../../repository';
 import AppDate from '@/api/lib/date';
 import { useMessage } from '@/context/MessageProvider';
 import { taskUpdateErrorMessage } from 'features/tasks/constants/taskConstants';
@@ -62,7 +62,7 @@ const EditableField = ({
     //task更新
     try {
       const key = type === 'text' ? 'title' : 'deadline';
-      const res = await updateTask(task.id, { ...task, [key]: newValue });
+      const res = await patchTask(task.id, { ...task, [key]: newValue });
       onUpdate?.(res);
     } catch (err) {
       showMessage('error', taskUpdateErrorMessage);
