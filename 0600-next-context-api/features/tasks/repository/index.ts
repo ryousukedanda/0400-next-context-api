@@ -1,4 +1,4 @@
-import { CreateTask, TaskInfo, Tasks, UpdateTask } from '../types/tasks';
+import { TaskInfo, Tasks } from '../types/tasks';
 import { instance } from '@/lib/axios';
 
 //タスクリスト取得
@@ -12,20 +12,25 @@ export const getTasks = async (
 
 //タスク詳細取得
 export const getTaskDetail = async (id: string) => {
-  const res = await instance.get<Tasks>(`/tasks/${id}`);
+  const res = await instance.get(`/tasks/${id}`);
   return res.data.data;
 };
 
 //タスク更新
-export const updateTask = async (
+export const patchTask = async (
   id: string,
-  updatedTask: UpdateTask
+  updatedTask: TaskInfo
 ): Promise<TaskInfo> => {
   const res = await instance.patch(`/tasks/${id}`, updatedTask);
   return res.data.data;
 };
 
 //タスク登録
-export const createTask = async (newTask: CreateTask) => {
+export const createTask = async (newTask: TaskInfo) => {
   await instance.post(`/tasks`, newTask);
+};
+
+//タスク削除
+export const deleteTask = async (id: string) => {
+  const res = await instance.delete(`/tasks/${id}`);
 };
