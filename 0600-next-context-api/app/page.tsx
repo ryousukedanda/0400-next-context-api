@@ -15,7 +15,19 @@ export default function Dashboard() {
       <div className="w-full h-full">
         {/* dashboard */}
         <div className="p-8 flex justify-between bg-light2 ">
-          <ProjectList />
+          <div className="grow shrink mr-8 ">
+            <h2 className="flex justify-between text-[14px] font-thin items-center">
+              プロジェクト
+            </h2>
+            <div className="py-4 px-0 ">
+              <ProjectList />
+            </div>
+            <div className="flex justify-end">
+              <a href="/projects" className="text-[10px] text-primary">
+                プロジェクト一覧
+              </a>
+            </div>
+          </div>
           <Chart />
         </div>
         {/* tasks */}
