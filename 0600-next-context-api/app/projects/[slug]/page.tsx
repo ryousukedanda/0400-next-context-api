@@ -14,14 +14,12 @@ import {
 } from 'features/projects/constants/projectConstants';
 import { getProjectDetail } from 'features/projects/repository';
 import { ProjectInfo } from 'features/projects/types/projects';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 
 const page = ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = use(params);
   const [project, setProject] = useState<ProjectInfo>(defaultProject);
   const { showMessage } = useMessage();
-  const deadline = new DateDecorator(project.deadline || '');
-  const restDay = deadline.from();
 
   useEffect(() => {
     const fetchProjectDetail = async () => {
@@ -34,6 +32,24 @@ const page = ({ params }: { params: Promise<{ slug: string }> }) => {
     };
     fetchProjectDetail();
   }, []);
+
+  const deadlineInfo = useMemo(() => {
+    if (!project.deadline) {
+      return {
+        restDay: undefined,
+        displayDate: '',
+      };
+    }
+
+    const decorator = new DateDecorator(project.deadline);
+
+    return {
+      restDay: decorator.from(),
+      displayDate: AppDate.parse(project.deadline)?.toString() ?? '',
+    };
+  }, [project.deadline]);
+
+  const { restDay, displayDate } = deadlineInfo;
 
   return (
     <div className="p-8 w-full h-full overflow-scroll bg-content">
@@ -64,11 +80,7 @@ const page = ({ params }: { params: Promise<{ slug: string }> }) => {
                         あと {restDay} 日
                       </span>
                       <span className="text-[12px] relative top-0.5">
-                        (
-                        {project.deadline
-                          ? AppDate.parse(project.deadline)?.toString()
-                          : ''}
-                        )
+                        ({displayDate})
                       </span>
                     </p>
                     <p className="text-[28px] font-bold tracking-[.2rem]">

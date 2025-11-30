@@ -9,8 +9,6 @@ export const getProjects = async (page?: number, limit?: number) => {
 };
 
 export const getProjectDetail = async (slug: string) => {
-  const res = await instance.get<{ data: ProjectInfo }>(`/projects/${slug}`, {
-    params: { slug },
-  });
+  const res = await instance.get<{ data: ProjectInfo }>(`/projects/${slug}`);
   return res.data.data;
 };

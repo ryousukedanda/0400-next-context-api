@@ -46,14 +46,15 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { projectId, ...rest } = await request.json();
+  const { project: projectParams, ...rest } = await request.json();
 
   const tasks = getTasks();
-  const project = getProjects().find((it: any) => it.id === projectId);
+  const project = getProjects().find((it: any) => it.id === projectParams.id);
 
   const task = factory.task({
-    id: getUUID(),
     ...rest,
+    id: getUUID(),
+
     project,
     createdAt: dayjs().format(),
     updatedAt: dayjs().format(),
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(
     {
-      data: null,
+      data: task.raw,
     },
     {
       status: 201,

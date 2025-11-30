@@ -43,6 +43,7 @@ export const descriptionFieldPlaceholder = 'タスクの説明・メモ';
 export const defaultTask: TaskInfo = {
   id: '',
   title: '',
+  kind: 'task',
   description: '',
   status: 'scheduled',
   createdAt: '',
