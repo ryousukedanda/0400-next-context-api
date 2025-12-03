@@ -1,6 +1,5 @@
 'use client';
 import DateDecorator from '@/api/datastore/models/date';
-import AppDate from '@/api/lib/date';
 import { useMessage } from '@/context/MessageProvider';
 import {
   faBoxArchive,
@@ -33,23 +32,12 @@ const page = ({ params }: { params: Promise<{ slug: string }> }) => {
     fetchProjectDetail();
   }, []);
 
-  const deadlineInfo = useMemo(() => {
-    if (!project.deadline) {
-      return {
-        restDay: undefined,
-        displayDate: '',
-      };
-    }
-
-    const decorator = new DateDecorator(project.deadline);
-
-    return {
-      restDay: decorator.from(),
-      displayDate: AppDate.parse(project.deadline)?.toString() ?? '',
-    };
-  }, [project.deadline]);
-
-  const { restDay, displayDate } = deadlineInfo;
+  const deadline = useMemo(
+    () => new DateDecorator(project.deadline ?? ''),
+    [project.deadline]
+  );
+  const restDay = deadline.from();
+  const displayDate = deadline?.forHtml ?? '';
 
   return (
     <div className="p-8 w-full h-full overflow-scroll bg-content">

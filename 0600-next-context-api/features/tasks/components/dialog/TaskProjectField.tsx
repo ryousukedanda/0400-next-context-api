@@ -57,6 +57,7 @@ const TaskProjectField = ({
               onChange((prev) => ({
                 ...prev,
                 project: { name: label, id: value },
+                projectId: value,
               }));
               setIsOpenProjectDropDown(false);
             }}

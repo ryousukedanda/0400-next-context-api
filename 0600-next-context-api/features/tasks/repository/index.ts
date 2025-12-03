@@ -27,7 +27,8 @@ export const patchTask = async (
 
 //タスク登録
 export const createTask = async (newTask: TaskInfo) => {
-  await instance.post(`/tasks`, newTask);
+  const { id, ...rest } = newTask;
+  await instance.post(`/tasks`, rest);
 };
 
 //タスク削除
