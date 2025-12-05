@@ -8,9 +8,7 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  console.log(slug);
   const project = getProjects().find((it: ProjectInfo) => it.slug === slug);
-  console.log(project);
   if (!project) {
     return notFound();
   }

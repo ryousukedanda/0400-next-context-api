@@ -26,10 +26,10 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { param }: { param: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
-  const body = await req.json();
+  const { id } = await param;
+  const params = await req.json();
 
   const tasks = getTasks();
   const index = tasks.findIndex((it: TaskInfo) => it.id === id);
@@ -45,7 +45,7 @@ export async function PATCH(
   }
 
   const task = factory.task(tasks[index]).assign({
-    ...body,
+    ...params,
     updatedAt: dayjs().format(),
   });
   const error = task.validate();
