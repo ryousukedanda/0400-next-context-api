@@ -19,7 +19,7 @@ const TaskProjectField = ({
   validationError,
 }: TaskProjectFieldProps) => {
   const [isOpenProjectDropDown, setIsOpenProjectDropDown] = useState(false);
-  const projectList = useFetchProjects();
+  const { projectList } = useFetchProjects();
   const ignoreRef = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -57,6 +57,7 @@ const TaskProjectField = ({
               onChange((prev) => ({
                 ...prev,
                 project: { name: label, id: value },
+                projectId: value,
               }));
               setIsOpenProjectDropDown(false);
             }}

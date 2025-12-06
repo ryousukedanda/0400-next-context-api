@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import dayjs from 'dayjs';
 import AppDate from '../../../lib/date';
 import { getTasks, setTasks, getProjects, getUUID } from '../../../datastore';
 import { factory } from '../../../datastore/models';
 import { PageInfo } from '../../../datastore/models/pagination';
 
-function parse(dateString: string) {
+function parse(dateString) {
   if (!dateString) {
     return;
   }
@@ -16,20 +16,20 @@ function parse(dateString: string) {
   return new AppDate(new Date(year, month - 1, day));
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
-  const page = Number(searchParams.get('page')) || 1;
-  const limit = Number(searchParams.get('limit')) || 20;
+  const page = searchParams.get('page') || 1;
+  const limit = searchParams.get('limit') || 20;
   const status = searchParams.get('status') || ['scheduled'];
 
-  const tasks = getTasks().filter((it: any) => {
+  const tasks = getTasks().filter((it) => {
     return status.includes(it.status);
   });
 
-  tasks.sort((a: any, b: any) => {
+  tasks.sort((a, b) => {
     const aa = parse(a.deadline);
     const bb = parse(b.deadline);
-    return aa?.isAfter(bb as AppDate) ? 1 : -1;
+    return aa.isAfter(bb) ? 1 : -1;
   });
   const pageInfo = new PageInfo({
     page,
@@ -45,11 +45,11 @@ export async function GET(request: NextRequest) {
   });
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request) {
   const { projectId, ...rest } = await request.json();
 
   const tasks = getTasks();
-  const project = getProjects().find((it: any) => it.id === projectId);
+  const project = getProjects().find((it) => it.id === projectId);
 
   const task = factory.task({
     id: getUUID(),
@@ -58,7 +58,6 @@ export async function POST(request: NextRequest) {
     createdAt: dayjs().format(),
     updatedAt: dayjs().format(),
   });
-
   const error = task.validate();
   if (error) {
     return NextResponse.json(

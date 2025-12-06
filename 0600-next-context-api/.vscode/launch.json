@@ -1,15 +1,24 @@
 {
   "version": "0.2.0",
   "configurations": [
+    // ✅ クライアント（ブラウザ）
     {
       "type": "chrome",
       "request": "launch",
       "name": "Next.js Client",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}"
+    },
+
+    // ✅ サーバー（API / route.ts）
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Next.js Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
     }
-  ],
-  "files.associations": {
-    "*.json": "jsonc"
-  }
+  ]
 }

@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import { getProjects } from "../../../../datastore";
-import { notFound } from "../../../../lib/renderer";
+import { NextResponse } from 'next/server';
+import { getProjects } from '../../../../datastore';
+import { notFound } from '../../../../lib/renderer';
 
 export async function GET(_, context) {
-  const { slug } = context.params || {};
+  const { slug } = (await context.params) || {};
   const project = getProjects().find((it) => it.slug === slug);
   if (!project) {
     return notFound();

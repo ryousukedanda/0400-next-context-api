@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import SidebarRow from './SidebarRow';
-const activeClass = 'text-dark font-bold';
+
 const Sidebar = () => {
   //クリックした時のイベントハンドラー
   const [isOpenSidebar, setIsOpenSidebar] = useState(true);

@@ -6,6 +6,7 @@ export type StatusType = 'scheduled' | 'completed' | 'archived';
 export interface TaskInfo {
   id: string;
   title: string;
+  kind: 'task' | 'milestone';
   description: string;
   status: StatusType;
   createdAt: string;

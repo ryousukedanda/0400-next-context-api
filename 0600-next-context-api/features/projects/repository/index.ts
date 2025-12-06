@@ -1,12 +1,14 @@
 import { instance } from '@/lib/axios';
-import { Projects } from 'features/projects/types/projects';
+import { ProjectInfo, Projects } from 'features/projects/types/projects';
 
-export const getProjects = async () => {
-  const res = await instance.get<Projects>('/projects');
-  return res.data.data;
+export const getProjects = async (page?: number, limit?: number) => {
+  const res = await instance.get<Projects>('/projects', {
+    params: { page, limit },
+  });
+  return res.data;
 };
 
-export const getProjectDetail = async (projectName: string) => {
-  const res = await instance.get<Projects>(`/projects/${projectName}`);
+export const getProjectDetail = async (slug: string) => {
+  const res = await instance.get<{ data: ProjectInfo }>(`/projects/${slug}`);
   return res.data.data;
 };

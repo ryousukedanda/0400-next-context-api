@@ -21,7 +21,7 @@ const ProjectCol = ({ task }: ProjectColProps) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { showMessage } = useMessage();
   const { onUpdateTask } = useTask();
-  const projectList = useFetchProjects();
+  const { projectList } = useFetchProjects();
 
   useClickOutside(
     menuRef,
