@@ -1,17 +1,13 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import dayjs from 'dayjs';
 import { getTasks, setTasks } from '../../../../datastore';
 import { factory } from '../../../../datastore/models';
 import { notFound } from '../../../../lib/renderer';
-import { TaskInfo } from 'features/tasks/types/tasks';
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
+export async function GET(_, context) {
+  const { id } = await context.params;
 
-  const task = getTasks().find((it: TaskInfo) => {
+  const task = getTasks().find((it) => {
     return it.id === id;
   });
 
@@ -24,15 +20,12 @@ export async function GET(
   });
 }
 
-export async function PATCH(
-  req: NextRequest,
-  { param }: { param: Promise<{ id: string }> }
-) {
-  const { id } = await param;
-  const params = await req.json();
+export async function PATCH(request, context) {
+  const { id } = await context.params;
+  const params = await request.json();
 
   const tasks = getTasks();
-  const index = tasks.findIndex((it: TaskInfo) => it.id === id);
+  const index = tasks.findIndex((it) => it.id === id);
   if (index == -1) {
     return NextResponse.json(
       {
@@ -61,13 +54,11 @@ export async function PATCH(
   });
 }
 
-export async function DELETE(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
+export async function DELETE(_, context) {
+  const { id } = await context.params;
+
   const tasks = getTasks();
-  const index = tasks.findIndex((it: TaskInfo) => it.id === id);
+  const index = tasks.findIndex((it) => it.id === id);
   if (index == -1) {
     return notFound();
   }
