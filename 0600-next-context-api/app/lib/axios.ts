@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/v1/users',
+  baseURL: '/api/v1/users', // ← localhost を消す！相対パスで呼ぶ
 });
