@@ -1,4 +1,5 @@
 [build]
+  base = "0600-next-context-api"
   command = "npm run build"
   publish = ".next"
 
