@@ -4,12 +4,18 @@ import Select from '@/components/elements/Select';
 import { limitLabel, limitOptions } from '@/constants';
 import TaskList from 'features/tasks/components/taskList/TaskList';
 import { useTask } from 'features/tasks/context/TaskProvider';
+import { useEffect } from 'react';
 
 const page = () => {
   const { pageInfo, fetchTasks } = useTask();
   const currentLimit = pageInfo.limit;
   const currentPage = pageInfo.page;
   const totalPage = Math.ceil((pageInfo.totalCount ?? 0) / (currentLimit ?? 1));
+
+  // 一覧ページ表示時にタスクを取得
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
 
   const handleFetchTasks = ({
     page = 1, //Selectでlimitが変わったら、表示ページは1から

@@ -6,10 +6,18 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import Chart from 'features/chart/components/Chart';
 import ProjectList from 'features/projects/components/ProjectList';
 import TaskList from 'features/tasks/components/taskList/TaskList';
+import { useTask } from 'features/tasks/context/TaskProvider';
+import { useEffect } from 'react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Dashboard() {
+  const { fetchTasks } = useTask();
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
   return (
     <div className="p-8 w-full h-full overflow-scroll bg-content">
       <div className="w-full h-full">
