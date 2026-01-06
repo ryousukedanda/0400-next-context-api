@@ -25,6 +25,7 @@ import {
 import { TaskInfo } from 'features/tasks/types/tasks';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
+import { useTask } from 'features/tasks/context/TaskProvider';
 
 const page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
@@ -33,6 +34,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
   const { showMessage } = useMessage();
   const { validationError, validate } = useError();
+  const { onUpdateTask } = useTask();
 
   const fetchTaskDetail = async (id: string) => {
     try {
@@ -54,9 +56,11 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
 
     try {
       //task登録
-      await patchTask(id, newTask);
+      const res = await patchTask(id, newTask);
       //タスク成功メッセージ表示
       showMessage('success', taskUpdateSuccessMessage);
+      //一覧の状態を更新
+      onUpdateTask(res);
     } catch (err) {
       //タスク失敗メッセージ表示
       showMessage('error', taskUpdateErrorMessage);

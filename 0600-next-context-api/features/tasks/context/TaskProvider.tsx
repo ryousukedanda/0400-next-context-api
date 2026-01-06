@@ -4,10 +4,12 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react';
+import { usePathname } from 'next/navigation';
 import { TaskInfo } from '../types/tasks';
 import { getTasks } from '../repository';
 import { useMessage } from '@/context/MessageProvider';
@@ -31,8 +33,9 @@ const TaskProvider = ({ children }: TaskProviderProps) => {
   const [tasks, setTasks] = useState<TaskInfo[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfoParams>({});
   const { showMessage } = useMessage();
+  const pathname = usePathname();
 
-  const fetchTasks = async (page?: number, limit?: number) => {
+  const fetchTasks = useCallback(async (page?: number, limit?: number) => {
     try {
       const res = await getTasks(page, limit);
       setTasks(res.data);
@@ -40,12 +43,14 @@ const TaskProvider = ({ children }: TaskProviderProps) => {
     } catch (err) {
       showMessage('error', taskGetErrorMessage);
     }
-  };
+  }, [showMessage]);
 
-  //taskList取得
+  // 一覧ページ表示時にタスクを取得
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    if (pathname === '/tasks') {
+      fetchTasks();
+    }
+  }, [pathname, fetchTasks]);
 
   //task更新メソッド
   const onUpdateTask = (task: TaskInfo) => {
