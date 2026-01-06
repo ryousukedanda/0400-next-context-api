@@ -1,10 +1,9 @@
 [build]
-  base = "0400-next-context-api"
   command = "npm run build"
   publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20" # 少し新しめに設定
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
