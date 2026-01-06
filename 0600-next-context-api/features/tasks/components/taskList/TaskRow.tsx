@@ -5,15 +5,9 @@ import StatusCol from './StatusCol';
 import DeadlineCol from './DeadlineCol';
 import DetailCol from './DetailCol';
 import { useTask } from '../../context/TaskProvider';
-import { useEffect } from 'react';
 
 const TaskRow = () => {
-  const { tasks, fetchTasks } = useTask();
-
-  //taskList取得
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  const { tasks } = useTask();
 
   return (
     <div>

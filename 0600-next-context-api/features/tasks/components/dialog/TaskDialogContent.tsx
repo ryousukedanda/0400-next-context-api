@@ -17,6 +17,7 @@ import { useMessage } from '@/context/MessageProvider';
 import { useModal } from '@/context/ModalProvider';
 import { useError } from '@/context/ErrorProvider';
 import { TaskInfo } from 'features/tasks/types/tasks';
+import { useTask } from 'features/tasks/context/TaskProvider';
 
 const TaskDialogContent = () => {
   const [newTask, setNewTask] = useState<TaskInfo>({
@@ -26,6 +27,7 @@ const TaskDialogContent = () => {
   const { showMessage } = useMessage();
   const { closeModal } = useModal();
   const { validate, validationError } = useError();
+  const { fetchTasks } = useTask()
 
   //task登録ハンドラーメソッド
   const handleCreateTask = async (newTask: TaskInfo) => {
@@ -38,6 +40,8 @@ const TaskDialogContent = () => {
       showMessage('success', taskAddSuccessMessage);
       //ダイアログを閉ざす
       closeModal();
+      //再取得
+      fetchTasks();
     } catch (err) {
       //タスク失敗メッセージ表示
       showMessage('error', taskAddErrorMessage);
