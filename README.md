@@ -1,5 +1,5 @@
 
-# Next.jsとReactContextApiの課題
+# Next.jsとReactContextAPIの課題
 
 このレポジトリは下記の内容を学習します。
 
