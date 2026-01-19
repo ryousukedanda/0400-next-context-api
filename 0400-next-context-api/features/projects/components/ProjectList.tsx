@@ -5,11 +5,11 @@ import {
   faFileLines,
 } from '@fortawesome/free-solid-svg-icons';
 import AppDate from '@/api/lib/date';
-import useFetchProjects from '../hooks/useFetchProjects';
+import { useProject } from '../context/ProjectProvider';
 import Link from 'next/link';
 
 const ProjectList = () => {
-  const { projectList } = useFetchProjects();
+  const { projectList } = useProject();
 
   return (
     <>

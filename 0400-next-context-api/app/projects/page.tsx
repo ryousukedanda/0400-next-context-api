@@ -1,10 +1,10 @@
 'use client';
 import Pagination from '@/components/elements/Pagination';
 import ProjectList from 'features/projects/components/ProjectList';
-import useFetchProjects from 'features/projects/hooks/useFetchProjects';
+import { useProject } from 'features/projects/context/ProjectProvider';
 
 const page = () => {
-  const { pageInfo, fetchProjects } = useFetchProjects();
+  const { pageInfo, fetchProjects } = useProject();
   const currentLimit = pageInfo.limit;
   const currentPage = pageInfo.page;
   const totalPage = Math.ceil((pageInfo.totalCount ?? 0) / (currentLimit ?? 1));

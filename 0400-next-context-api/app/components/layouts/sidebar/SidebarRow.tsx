@@ -2,8 +2,7 @@ import Link from 'next/link';
 import SidebarProjectRow from './SidebarProjectRow';
 import { sidebarList } from '@/constants';
 import { usePathname } from 'next/navigation';
-import useFetchProjects from 'features/projects/hooks/useFetchProjects';
-import { useEffect, useState } from 'react';
+
 
 const SidebarRow = () => {
   const pathName = usePathname();

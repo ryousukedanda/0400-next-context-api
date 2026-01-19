@@ -1,12 +1,12 @@
 import AppDate from '@/api/lib/date';
-import useFetchProjects from 'features/projects/hooks/useFetchProjects';
+import { useProject } from 'features/projects/context/ProjectProvider';
 import Link from 'next/link';
 
 interface SidebarProjectRowProps {
   pathName: string;
 }
 const SidebarProjectRow = ({ pathName }: SidebarProjectRowProps) => {
-  const { projectList } = useFetchProjects();
+  const { projectList } = useProject();
   return (
     <ul className="my-4 mr-0 ml-8">
       {projectList.map((project) => {

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TaskInfo } from 'features/tasks/types/tasks';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { noSlectOption } from 'features/tasks/constants/taskConstants';
-import useFetchProjects from 'features/projects/hooks/useFetchProjects';
+import { useProject } from 'features/projects/context/ProjectProvider';
 import { ValidationErrorState } from '@/context/ErrorProvider';
 
 interface TaskProjectFieldProps {
@@ -19,7 +19,7 @@ const TaskProjectField = ({
   validationError,
 }: TaskProjectFieldProps) => {
   const [isOpenProjectDropDown, setIsOpenProjectDropDown] = useState(false);
-  const { projectList } = useFetchProjects();
+  const { projectList } = useProject();
   const ignoreRef = useRef<HTMLDivElement | null>(null);
 
   return (

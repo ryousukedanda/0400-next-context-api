@@ -10,7 +10,7 @@ import { useTask } from '../../context/TaskProvider';
 import { useClickOutside } from 'features/tasks/hooks/useClickOutside';
 import { taskUpdateErrorMessage } from 'features/tasks/constants/taskConstants';
 import { useMessage } from '@/context/MessageProvider';
-import useFetchProjects from 'features/projects/hooks/useFetchProjects';
+import { useProject } from 'features/projects/context/ProjectProvider';
 
 interface ProjectColProps {
   task: TaskInfo;
@@ -21,7 +21,7 @@ const ProjectCol = ({ task }: ProjectColProps) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { showMessage } = useMessage();
   const { onUpdateTask } = useTask();
-  const { projectList } = useFetchProjects();
+  const { projectList } = useProject();
 
   useClickOutside(
     menuRef,

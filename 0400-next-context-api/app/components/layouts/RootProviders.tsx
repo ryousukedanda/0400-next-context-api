@@ -2,6 +2,7 @@ import { ErrorProvider } from '@/context/ErrorProvider';
 import MessageProvider from '@/context/MessageProvider';
 import { ModalProvider } from '@/context/ModalProvider';
 import TaskProvider from 'features/tasks/context/TaskProvider';
+import { ProjectProvider } from 'features/projects/context/ProjectProvider';
 import { ReactNode } from 'react';
 
 interface RootProvidersProps {
@@ -12,7 +13,9 @@ const RootProviders = ({ children }: RootProvidersProps) => {
     <ModalProvider>
       <MessageProvider>
         <ErrorProvider>
-          <TaskProvider>{children}</TaskProvider>
+          <ProjectProvider>
+            <TaskProvider>{children}</TaskProvider>
+          </ProjectProvider>
         </ErrorProvider>
       </MessageProvider>
     </ModalProvider>
