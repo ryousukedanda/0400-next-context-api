@@ -1,23 +1,33 @@
 import { NextResponse } from "next/server";
-import { getProjects } from "../../../datastore";
-import { PageInfo } from "../../../datastore/models/pagination";
+import { prisma } from "../../../../../lib/prisma";
 
 export async function GET(request) {
-  const projects = getProjects();
   const searchParams = request.nextUrl.searchParams;
-  const page = searchParams.get("page") || 1;
-  const limit = searchParams.get("limit") || 20;
+  const page = parseInt(searchParams.get("page")) || 1;
+  const limit = parseInt(searchParams.get("limit")) || 20;
 
-  const pageInfo = new PageInfo({
-    page,
-    limit,
-    totalCount: projects.length,
-  });
+  try {
+    const totalCount = await prisma.project.count();
+    const projects = await prisma.project.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-  const data = pageInfo.paginate(projects);
-
-  return NextResponse.json({
-    data,
-    pageInfo: pageInfo.serialize,
-  });
+    return NextResponse.json({
+      data: projects,
+      pageInfo: {
+        page,
+        limit,
+        totalCount,
+      },
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500 }
+    );
+  }
 }

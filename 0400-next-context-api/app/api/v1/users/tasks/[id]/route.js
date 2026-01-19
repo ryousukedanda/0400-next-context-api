@@ -1,72 +1,61 @@
 import { NextResponse } from 'next/server';
-import dayjs from 'dayjs';
-import { getTasks, setTasks } from '../../../../datastore';
-import { factory } from '../../../../datastore/models';
-import { notFound } from '../../../../lib/renderer';
+import { prisma } from '../../../../../lib/prisma';
 
 export async function GET(_, context) {
-  const { id } = await context.params;
+  try {
+    const { id } = await context.params;
 
-  const task = getTasks().find((it) => {
-    return it.id === id;
-  });
+    const task = await prisma.task.findUnique({
+      where: { id },
+      include: { project: true },
+    });
 
-  if (!task) {
-    return notFound();
+    if (!task) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ data: task });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  return NextResponse.json({
-    data: task,
-  });
 }
 
 export async function PATCH(request, context) {
-  const { id } = await context.params;
-  const params = await request.json();
+  try {
+    const { id } = await context.params;
+    const params = await request.json();
 
-  const tasks = getTasks();
-  const index = tasks.findIndex((it) => it.id === id);
-  if (index == -1) {
-    return NextResponse.json(
-      {
-        message: 'Not found',
+    const task = await prisma.task.update({
+      where: { id },
+      data: {
+        ...params,
+        updatedAt: new Date(),
       },
-      {
-        status: 404,
-      }
-    );
+      include: { project: true },
+    });
+
+    return NextResponse.json({ data: task });
+  } catch (error) {
+    if (error.code === 'P2025') {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  const task = factory.task(tasks[index]).assign({
-    ...params,
-    updatedAt: dayjs().format(),
-  });
-  const error = task.validate();
-  if (error) {
-    return notFound();
-  }
-
-  tasks[index] = task.raw;
-  setTasks(tasks);
-
-  return NextResponse.json({
-    data: task.raw,
-  });
 }
 
 export async function DELETE(_, context) {
-  const { id } = await context.params;
+  try {
+    const { id } = await context.params;
 
-  const tasks = getTasks();
-  const index = tasks.findIndex((it) => it.id === id);
-  if (index == -1) {
-    return notFound();
+    const task = await prisma.task.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ data: task });
+  } catch (error) {
+    if (error.code === 'P2025') {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  const res = tasks.splice(index, 1);
-  setTasks(tasks);
-
-  return NextResponse.json({
-    data: res,
-  });
 }

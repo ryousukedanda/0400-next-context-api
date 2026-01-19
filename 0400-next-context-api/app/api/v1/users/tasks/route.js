@@ -1,84 +1,84 @@
 import { NextResponse } from 'next/server';
-import dayjs from 'dayjs';
-import AppDate from '../../../lib/date';
-import { getTasks, setTasks, getProjects, getUUID } from '../../../datastore';
-import { factory } from '../../../datastore/models';
-import { PageInfo } from '../../../datastore/models/pagination';
-
-function parse(dateString) {
-  if (!dateString) {
-    return;
-  }
-
-  const [year, month, day] = dateString
-    .split('-')
-    .map((str) => parseInt(str, 10));
-  return new AppDate(new Date(year, month - 1, day));
-}
+import { prisma } from '../../../../../lib/prisma';
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
-  const page = searchParams.get('page') || 1;
-  const limit = searchParams.get('limit') || 20;
-  const status = searchParams.get('status') || ['scheduled'];
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 20;
+  const status = (searchParams.get('status') || 'scheduled').split(',');
 
-  const tasks = getTasks().filter((it) => {
-    return status.includes(it.status);
-  });
+  try {
+    const totalCount = await prisma.task.count({
+      where: {
+        status: { in: status },
+      },
+    });
 
-  tasks.sort((a, b) => {
-    const aa = parse(a.deadline);
-    const bb = parse(b.deadline);
-    return aa.isAfter(bb) ? 1 : -1;
-  });
-  const pageInfo = new PageInfo({
-    page,
-    limit,
-    totalCount: tasks.length,
-  });
+    const tasks = await prisma.task.findMany({
+      where: {
+        status: { in: status },
+      },
+      include: {
+        project: true,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: [
+        { deadline: 'desc' },
+        { createdAt: 'desc' },
+      ],
+    });
 
-  const data = pageInfo.paginate(tasks);
-
-  return NextResponse.json({
-    data,
-    pageInfo: pageInfo.serialize,
-  });
+    return NextResponse.json({
+      data: tasks,
+      pageInfo: {
+        page,
+        limit,
+        totalCount,
+      },
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request) {
-  const { projectId, ...rest } = await request.json();
+  try {
+    const body = await request.json();
+    const { title, description, status, deadline, projectId } = body;
 
-  const tasks = getTasks();
-  const project = getProjects().find((it) => it.id === projectId);
+    if (!title) {
+      return NextResponse.json(
+        { error: 'Title is required' },
+        { status: 400 }
+      );
+    }
 
-  const task = factory.task({
-    id: getUUID(),
-    ...rest,
-    project,
-    createdAt: dayjs().format(),
-    updatedAt: dayjs().format(),
-  });
-  const error = task.validate();
-  if (error) {
-    return NextResponse.json(
-      {
-        message: error,
+    const task = await prisma.task.create({
+      data: {
+        title,
+        description: description || '',
+        status: status || 'scheduled',
+        kind: 'task',
+        deadline: new Date(deadline),
+        projectId: projectId || null,
       },
-      {
-        status: 400,
-      }
+      include: {
+        project: true,
+      },
+    });
+
+    return NextResponse.json(
+      { data: task },
+      { status: 201 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500 }
     );
   }
-
-  tasks.push(task.raw);
-  setTasks(tasks);
-
-  return NextResponse.json(
-    {
-      data: null,
-    },
-    {
-      status: 201,
-    }
-  );
 }
