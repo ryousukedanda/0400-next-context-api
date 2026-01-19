@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface DateInputProps {
+  value?: string;
   defaultValue?: string;
   inputRef?: React.RefObject<HTMLInputElement | null>;
   className?: string;
@@ -9,6 +10,7 @@ interface DateInputProps {
 }
 
 const DateInput = ({
+  value,
   defaultValue,
   inputRef,
   onBlur,
@@ -18,6 +20,7 @@ const DateInput = ({
   return (
     <input
       type="date"
+      value={value}
       defaultValue={defaultValue}
       ref={inputRef}
       className={`rounded-sm py-2 px-3 font-light text-dark border-0 shadow-[0_0_4px_1px_#22222210] ${className}`}

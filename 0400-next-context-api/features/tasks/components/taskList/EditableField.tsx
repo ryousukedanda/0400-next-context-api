@@ -5,7 +5,7 @@ import { patchTask } from '../../repository';
 import AppDate from '@/api/lib/date';
 import { useMessage } from '@/context/MessageProvider';
 import { taskUpdateErrorMessage } from 'features/tasks/constants/taskConstants';
-import DateInput from '@/components/elements/DataInput';
+import DateInput from '@/components/elements/DateInput';
 import InputField from '@/components/elements/InputField';
 
 interface EditableFieldProps {

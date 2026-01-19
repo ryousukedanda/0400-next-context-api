@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { TaskInfo } from 'features/tasks/types/tasks';
 import { ValidationErrorState } from '@/context/ErrorProvider';
 import AppDate from '@/api/lib/date';
-import DateInput from '@/components/elements/DataInput';
+import DateInput from '@/components/elements/DateInput';
 
 interface TaskDeadlineFieldProps {
   newTask: TaskInfo;
