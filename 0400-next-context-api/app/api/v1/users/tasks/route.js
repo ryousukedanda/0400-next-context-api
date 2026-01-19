@@ -24,7 +24,6 @@ export async function GET(request) {
       skip: (page - 1) * limit,
       take: limit,
       orderBy: [
-        { deadline: 'desc' },
         { createdAt: 'desc' },
       ],
     });
@@ -48,7 +47,7 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { title, description, status, deadline, projectId } = body;
+    const { title, description, status, deadline, projectId, project } = body;
 
     if (!title) {
       return NextResponse.json(
@@ -57,6 +56,9 @@ export async function POST(request) {
       );
     }
 
+    // project オブジェクトが含まれている場合、projectId を抽出
+    const finalProjectId = projectId || (project?.id) || null;
+
     const task = await prisma.task.create({
       data: {
         title,
@@ -64,7 +66,7 @@ export async function POST(request) {
         status: status || 'scheduled',
         kind: 'task',
         deadline: new Date(deadline),
-        projectId: projectId || null,
+        projectId: finalProjectId,
       },
       include: {
         project: true,

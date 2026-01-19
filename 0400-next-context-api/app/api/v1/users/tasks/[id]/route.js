@@ -25,10 +25,16 @@ export async function PATCH(request, context) {
     const { id } = await context.params;
     const params = await request.json();
 
+    // project オブジェクトが含まれている場合、projectId を抽出
+    const { project, ...data } = params;
+    if (project && project.id) {
+      data.projectId = project.id;
+    }
+
     const task = await prisma.task.update({
       where: { id },
       data: {
-        ...params,
+        ...data,
         updatedAt: new Date(),
       },
       include: { project: true },
