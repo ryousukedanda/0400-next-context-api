@@ -28,12 +28,17 @@ export async function GET(request) {
       ],
     });
 
+    const hasNext = page * limit < totalCount;
+    const hasPrevious = page > 1;
+
     return NextResponse.json({
       data: tasks,
       pageInfo: {
-        page,
-        limit,
         totalCount,
+        limit,
+        page,
+        hasNext,
+        hasPrevious,
       },
     });
   } catch (error) {

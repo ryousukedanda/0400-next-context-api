@@ -104,43 +104,6 @@ const page = ({ params }: { params: Promise<{ slug: string }> }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center text-[14px] p-4 my-4 mx-0 w-full">
-                  <ul className="flex bg-light2 relative top-5 right-2 pl-2 pt-2 pr-2 pb-4">
-                    <li>
-                      <div className="flex items-center py-0 px-4 border-r border-border">
-                        <div className="flex justify-center items-center h-full">
-                          <FontAwesomeIcon
-                            icon={faCalendar}
-                            className="w-[1em] h-[1em]"
-                          />
-                        </div>
-                        {project.stats?.states?.scheduled}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex items-center py-0 px-4 border-r border-border">
-                        <div className="flex justify-center items-center h-full">
-                          <FontAwesomeIcon
-                            icon={faCheck}
-                            className="w-[1em] h-[1em]"
-                          />
-                        </div>
-                        {project.stats?.states?.completed}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex items-center py-0 px-4 border-r-0">
-                        <div className="flex justify-center items-center h-full">
-                          <FontAwesomeIcon
-                            icon={faBoxArchive}
-                            className="w-[1em] h-[1em]"
-                          />
-                        </div>
-                        {project.stats?.states?.archived}
-                      </div>
-                    </li>
-                  </ul>
-                </div>
               </div>
             </div>
           </div>

@@ -47,25 +47,6 @@ const ProjectList = () => {
                   <p>{project.shouldbe}</p>
                 </div>
               </div>
-              <div className="flex justify-end text-dark-week">
-                <div className="flex items-center">
-                  <p className="cursor-pointer flex items-center">
-                    <span className="mr-1 ml-2">
-                      <FontAwesomeIcon
-                        icon={faCodeCommit}
-                        className="w-3 h-3"
-                      />
-                    </span>
-                    <span className="text-[12px] text-dark-week ">4</span>
-                  </p>
-                  <p className="cursor-pointer flex items-center">
-                    <span className="mr-1 ml-2">
-                      <FontAwesomeIcon icon={faFileLines} className="w-3 h-3" />
-                    </span>
-                    <span className="text-[12px] text-dark-week">30</span>
-                  </p>
-                </div>
-              </div>
             </div>
           </Link>
         );
