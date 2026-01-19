@@ -31,6 +31,16 @@ export async function PATCH(request, context) {
       data.projectId = project.id;
     }
 
+    // deadline が文字列の場合、Date オブジェクトに変換
+    if (data.deadline && typeof data.deadline === 'string') {
+      data.deadline = new Date(data.deadline);
+    }
+
+    // projectId が空文字列の場合は null に設定
+    if (data.projectId === '') {
+      data.projectId = null;
+    }
+
     const task = await prisma.task.update({
       where: { id },
       data: {

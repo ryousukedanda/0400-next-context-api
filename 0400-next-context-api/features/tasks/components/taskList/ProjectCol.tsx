@@ -29,11 +29,11 @@ const ProjectCol = ({ task }: ProjectColProps) => {
     isOpenProjectDropDown
   );
 
-  const handleUpdateTask = async (value: string) => {
+  const handleUpdateTask = async (id: string, name: string) => {
     try {
       const res = await patchTask(task.id, {
         ...task,
-        project: { name: value, id: '' },
+        project: { name, id },
       });
       onUpdateTask(res);
     } catch (err) {
@@ -65,8 +65,8 @@ const ProjectCol = ({ task }: ProjectColProps) => {
             label: project.name,
             value: project.id,
           }))}
-          onSelect={(_value, label) => handleUpdateTask(label)}
-          onClickOutside={() => setIsOpenProjectDropDown}
+          onSelect={(id, name) => handleUpdateTask(id, name )}
+          onClickOutside={() => setIsOpenProjectDropDown(false)}
         />
       </div>
     </div>
