@@ -1,85 +1,75 @@
+# Project Management Dashboard (Next.js & React Context API)
 
-# Next.jsとReactContextAPIの課題
+メンターより提供されたダッシュボードのデモサイトをNext.jsで再現し、さらにバックエンドのデータ永続化層を独自に改善したポートフォリオです。
 
-このレポジトリは下記の内容を学習します。
+## 🚀 プロジェクトの概要
 
-1. Next.js 基礎
-2. React Context API
-3. Web API 統合(HTTP, REST API, Promise)
-   
-## 課題内容
+本プロジェクトは、Next.jsとReact Context APIを用いた状態管理、およびWeb APIの統合を目的としたタスク管理ダッシュボードです。
 
-下記デモと同様のものを作成してください。
+### 開発の背景と目的
+- **課題の再現**: 提供されたデモサイトのUI/UXおよび機能をNext.js(TypeScript)で再現し、保守性の高いコンポーネント設計を行う。
+- **技術的挑戦**: `features` ベースのディレクトリ設計、React Context APIを用いた効率的な状態管理の実装。
+- **課題解決（独自改善）**: 
+  初期の提供コードではAPIのデータがメモリ保持のみで、デプロイ環境で永続化されない課題がありました。そのため、**Prisma + PostgreSQL**を導入し、実運用可能な構成へ刷新しました。
 
-### デモ
+## 🔗 リンク
+- **デモサイト**: https://0400-next-context-api.vercel.app/
+- **元となった課題デモ**: https://next-context-api.netlify.app/
+- **API仕様書 (Swagger)**: https://next-context-api.netlify.app/api/v1/spec
 
-[デモ](https://next-context-api.netlify.app/)
+## ✨ 主な機能
+- **ダッシュボード**: Chart.jsを用いたプロジェクト進捗状況の可視化。
+- **タスク管理**: プロジェクト別タスク一覧。追加・削除・編集が可能。
+- **プロジェクト管理**: 進行中のプロジェクト一覧。
 
-### 成果物
+## 🛠 使用技術
 
-[成果物](https://0400-next-context-api.netlify.app/)
+### Frontend
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **State Management**: React Context API
+- **UI Libraries**: Tailwind CSS, Chart.js, Axios
 
-## 使用するAPIについて
+### Backend & Database (独自拡張)
+- **ORM**: Prisma
+- **Database**: PostgreSQL
+- **API**: Next.js Route Handlers 
 
-使用するAPIはこちらのリポジトリにある api.zip を展開した後、　Next.js プロジェクトの app/api に配置をしてそちらの APIを使うようにしてください。
-(Next のリクエストハンドラの機能を使って実装しています。）
+## 💡 独自に工夫・改善した点
 
-```zsh
-$ unzip api.zip
-```
+### 1. データ永続化層の刷新 (Prisma導入)
+元々の課題ではデータが揮発性だったため、自ら**Prisma ORM**を選定・導入。`schema.prisma` の定義からマイグレーション、シードデータの作成まで一貫して行い、アプリケーションの信頼性を向上させました。
 
-### API 仕様書
+### 2. 関心事の分離を意識したディレクトリ設計
+`features` ディレクトリを導入し、`chart`, `projects`, `tasks` ごとに `components`, `hooks`, `repository`, `context` をカプセル化しました。これにより、機能追加時の影響範囲を限定し、保守性の高いコードを実現しています。
 
-Swagger UI を使用して仕様を管理しています。こちらでエンドポイントやリクエストBodyを確認してください。
+### 3. 責務を意識したコンポーネント設計
+特に汎用性の高いコンポーネント(InputField.tsx,Pagination.tsxなど)は渡すPropsやどこまで状態を管理させるかなど、使う側を意識してコンポーネントを設計しました。
 
-https://next-context-api.netlify.app/api/v1/spec
-
-## 課題の進め方
-
-
-#### 1. 課題の最終ゴールを確認する
-
-デモを確認したり、メンターに確認してこの課題で達成すべき内容を確認してください。
-
-#### 2. 必要な概念を確認する
-
-課題でやる全体像を把握した上で課題に必要な概念を学んで取り組んでください。
-この課題ではリポジトリをフォークするのではなく、自分のリポジトリを作成して取り組んでください。
-
-[参考資料](./docs/documents.md)
-
-#### 3. 実装に取り組む
-
-実装量が多いので適切なタイミングでメンターに方向性のチェックを依頼するようにしてください。
-
-Hint: 方向性のチェックを行う際は、プルリクエストを使用して現時点のコードを共有しながら進めましょう。
-
-- [プルリクエストを出す上での注意点](https://lab.ver-1-0.net/posts/pr-points/)
-- [動画|プルリクエストを作るときに考えること。各ステップでのNG行動と意識すること](https://www.youtube.com/watch?v=bFSHeY7_Igw)
-
-
-#### 4. 実装が完了したら、Github Pages にアップロードする。
-
-#### 5. メンターに最終レビューを依頼する
-
-## 実装のチェックリスト
-
-- [ ] Next.js(TypeScript) プロジェクトを作成する
-- [ ] ESlint, Prettier を設定する
-- [ ] api.zip を解答して next.js プロジェクトの app/api に配置。
-- [ ] api.zip で実装された API を使用して、デモと同等のUIを実装する
-    - [ ] ダッシュボード画面(/)の実装。(グラフの表示部分は [Chart.js](https://www.chartjs.org/docs/latest/getting-started/installation.html#npm) を使用)
-    - [ ] タスク一覧画面(tasks)の実装。
-    - [ ] プロジェクト一覧画面(tasks)の実装。
-     
-## 未実装・今後の課題
-
+## 📝 未実装・今後の課題
 - [ ] ログイン機能
 - [ ] インフォメーション詳細画面
 - [ ] 通知詳細画面
 - [ ] プロジェクト追加機能
 - [ ] プロジェクト編集機能
 - [ ] 進捗グラフの値が動的ではない
-- [ ] 開発サーバでは編集・追加機能が正しく動くが、デプロイすると正しく動かない。(データが永続化されていないため)
 
+## 今後挑戦したいこと
+- React/Next.js周りのライブラリを学習・実装し、プロダクトの保守性や品質、開発スピードを高めたい。(React-hook-form,Zod,Zustand,TanstackQuery,Auth.jsなど)
+- AWSを用いてデプロイしたい。
 
+## 📂 ディレクトリ構成（主要部分）
+```text
+.
+├── app/
+│   ├── api/v1/     # Prismaを用いた永続化対応済みのAPIルート
+│   ├── components/ # 共通UIコンポーネント
+│   ├── context/    # グローバルな状態管理
+│   ├── projects/   # プロジェクト関連ページ
+│   └── tasks/      # タスク関連ページ
+├── features/       # ドメインごとの機能モジュール
+│   ├── chart/      # グラフ描画ロジック
+│   ├── projects/   # プロジェクト管理
+│   └── tasks/      # タスク管理
+├── prisma/         # DBスキーマ定義・マイグレーション
+└── lib/            # Prisma Client
